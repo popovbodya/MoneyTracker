@@ -13,6 +13,6 @@ class TransactionEntityConverter : Converter<TransactionEntity, Transaction> {
     }
 
     override fun convert(from: TransactionEntity): Transaction {
-        return Transaction(from.wallet, from.currency, from.category, from.amount, from.date, from.description)
+        return Transaction(from.id, from.wallet, from.currency, from.category, from.amount, from.date, from.description)
     }
 }

@@ -7,7 +7,6 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.*
 import ru.popov.bodya.data.repositories.CurrenciesRepository
-import ru.popov.bodya.domain.currency.model.ExchangeRates
 import ru.popov.bodya.domain.currency.model.Rates
 
 /**
@@ -18,9 +17,6 @@ class CurrencyInteractorTest {
     private companion object {
         const val USD_RATE = 0.015789
         const val EUR_RATE = 0.014321
-        const val TIMESTAMP = 123456789L
-        const val BASE = "RUB"
-        const val DATE = "06.08.2018"
     }
 
     private lateinit var currencyInteractor: CurrencyInteractor
@@ -34,7 +30,7 @@ class CurrencyInteractorTest {
 
     @Test
     fun testGetExchangeRate() {
-        val expected = createExchangeRates()
+        val expected = createRates()
         `when`(currenciesRepository.getExchangeRate()).thenReturn(Single.just(expected))
         currencyInteractor.getExchangeRate()
                 .test()
@@ -45,7 +41,7 @@ class CurrencyInteractorTest {
 
     @Test
     fun testGetCachedExchangeRate() {
-        val expected = createExchangeRates()
+        val expected = createRates()
         `when`(currenciesRepository.getCachedExchangeRate()).thenReturn(Single.just(expected))
         currencyInteractor.getCachedExchangeRate()
                 .test()
@@ -56,20 +52,19 @@ class CurrencyInteractorTest {
 
     @Test
     fun testGetUsdRate() {
-        val exchangeRates = createExchangeRates()
-        val expected = 1 / exchangeRates.rates.usd
-        val actual = currencyInteractor.getUsdRate(exchangeRates)
+        val rates = createRates()
+        val expected = 1 / rates.usd
+        val actual = currencyInteractor.getUsdRate(rates.usd)
         assertThat(actual, `is`(expected))
     }
 
     @Test
     fun testGetEurRate() {
-        val exchangeRates = createExchangeRates()
-        val expected = 1/ exchangeRates.rates.eur
-        val actual  = currencyInteractor.getEurRate(exchangeRates)
+        val rates = createRates()
+        val expected = 1/ rates.eur
+        val actual  = currencyInteractor.getEurRate(rates.eur)
         assertThat(actual, `is`(expected))
     }
 
-    private fun createExchangeRates() = ExchangeRates(TIMESTAMP, BASE, DATE, createRates())
     private fun createRates() = Rates(USD_RATE, EUR_RATE)
 }

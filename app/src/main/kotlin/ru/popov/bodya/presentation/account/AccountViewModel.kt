@@ -9,7 +9,7 @@ import ru.popov.bodya.core.rx.RxSchedulers
 import ru.popov.bodya.core.rx.RxSchedulersTransformer
 import ru.popov.bodya.domain.currency.CurrencyInteractor
 import ru.popov.bodya.domain.currency.model.Currency
-import ru.popov.bodya.domain.currency.model.ExchangeRates
+import ru.popov.bodya.domain.currency.model.Rates
 import ru.popov.bodya.domain.transactions.TransactionsInteractor
 import ru.popov.bodya.domain.transactions.models.Transaction
 import ru.popov.bodya.domain.transactions.models.TransactionsCategory
@@ -33,9 +33,9 @@ class AccountViewModel @Inject constructor(
 
         currencyInteractor.getCachedExchangeRate()
                 .doOnSubscribe { usdExchangeRateLiveData.postValue(Resource.loading(0.0)) }
-                .doOnSuccess { exchangeRates: ExchangeRates ->
-                    usdExchangeRateLiveData.postValue(Resource.success(currencyInteractor.getUsdRate(exchangeRates)))
-                    eurExchangeRateLiveData.postValue(Resource.success(currencyInteractor.getEurRate(exchangeRates)))
+                .doOnSuccess { rates: Rates ->
+                    usdExchangeRateLiveData.postValue(Resource.success(currencyInteractor.getUsdRate(rates.usd)))
+                    eurExchangeRateLiveData.postValue(Resource.success(currencyInteractor.getEurRate(rates.eur)))
                 }
                 .doOnError { usdExchangeRateLiveData.postValue(Resource.error("", 0.0)) }
                 .flatMap { transactionsInteractor.getAllTransactionsByWallet(WalletType.BANK_ACCOUNT) }
@@ -43,8 +43,8 @@ class AccountViewModel @Inject constructor(
                 .observeOn(rxSchedulers.computationScheduler())
                 .map { getTransactionsPair(it) }
                 .zipWith(currencyInteractor.getCachedExchangeRate(),
-                        BiFunction { pair: Pair<List<Transaction>, List<Transaction>>, exchangeRate: ExchangeRates ->
-                            getListPairAmounts(pair, exchangeRate)
+                        BiFunction { pair: Pair<List<Transaction>, List<Transaction>>, rates: Rates ->
+                            getListPairAmounts(pair, rates)
                         })
                 .doOnSuccess {
                     incomeLiveData.postValue(it.first)
@@ -58,8 +58,8 @@ class AccountViewModel @Inject constructor(
 
     private fun getAmount(pair: Pair<Double, Double>): Double = pair.first - pair.second
 
-    private fun getListPairAmounts(pair: Pair<List<Transaction>, List<Transaction>>, exchangeRates: ExchangeRates): Pair<Double, Double> =
-            Pair(getTransactionListAmount(pair.first, exchangeRates), getTransactionListAmount(pair.second, exchangeRates))
+    private fun getListPairAmounts(pair: Pair<List<Transaction>, List<Transaction>>, rates: Rates): Pair<Double, Double> =
+            Pair(getTransactionListAmount(pair.first, rates), getTransactionListAmount(pair.second, rates))
 
     private fun getTransactionsPair(transactionList: List<Transaction>): Pair<List<Transaction>, List<Transaction>> {
         val incomeList: MutableList<Transaction> = mutableListOf()
@@ -73,14 +73,14 @@ class AccountViewModel @Inject constructor(
         return Pair(incomeList, exposeList)
     }
 
-    private fun getTransactionListAmount(transactionList: List<Transaction>, exchangeRates: ExchangeRates): Double =
-            transactionList.sumByDouble { getTransactionAmount(it, exchangeRates) }
+    private fun getTransactionListAmount(transactionList: List<Transaction>, rates: Rates): Double =
+            transactionList.sumByDouble { getTransactionAmount(it, rates) }
 
-    private fun getTransactionAmount(transaction: Transaction, exchangeRates: ExchangeRates): Double {
+    private fun getTransactionAmount(transaction: Transaction, rates: Rates): Double {
         return when (transaction.currency) {
             Currency.RUB -> transaction.amount
-            Currency.EUR -> transaction.amount * (1 / exchangeRates.rates.eur)
-            Currency.USD -> transaction.amount * (1 / exchangeRates.rates.usd)
+            Currency.USD -> transaction.amount * (1 / rates.usd)
+            Currency.EUR -> transaction.amount * (1 / rates.eur)
         }
     }
 }

@@ -14,6 +14,10 @@ import java.util.*
  */
 class TransactionsInteractor(private val transactionsRepository: TransactionsRepository) {
 
+    companion object {
+        const val DEFAULT_ID = 1
+    }
+
     fun getAllTransactionsByWallet(walletType: WalletType): Single<List<Transaction>> =
             transactionsRepository.getAllTransactionsByWallet(walletType)
 
@@ -24,10 +28,10 @@ class TransactionsInteractor(private val transactionsRepository: TransactionsRep
             transactionsRepository.getExpenseTransactionsByWallet(walletType)
 
     fun addIncomeTransaction(selectedWallet: WalletType, selectedCategory: TransactionsCategory.Income, selectedCurrency: Currency, amount: Double, date: Date, comment: String): Completable {
-        return transactionsRepository.addIncomeTransaction(Transaction(selectedWallet, selectedCurrency, selectedCategory, amount, date, comment))
+        return transactionsRepository.addIncomeTransaction(Transaction(DEFAULT_ID, selectedWallet, selectedCurrency, selectedCategory, amount, date, comment))
     }
 
     fun addExpenseTransaction(selectedWallet: WalletType, selectedCategory: TransactionsCategory.Expense, selectedCurrency: Currency, amount: Double, date: Date, comment: String): Completable {
-        return transactionsRepository.addExpenseTransaction(Transaction(selectedWallet, selectedCurrency, selectedCategory, amount, date, comment))
+        return transactionsRepository.addExpenseTransaction(Transaction(DEFAULT_ID, selectedWallet, selectedCurrency, selectedCategory, amount, date, comment))
     }
 }
