@@ -111,7 +111,10 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
 
     private fun subscribeToViewModel() {
         viewModel.transactionCategoriesLiveData.observe(this, Observer { categoriesList ->
-            categoriesList?.apply { categoriesAdapter.setCategoriesList(this) }
+            categoriesList?.apply {
+                selectedCategory = this[0]
+                categoriesAdapter.setCategoriesList(this)
+            }
         })
 
         viewModel.transactionAddStatus.observe(this, Observer { resource ->

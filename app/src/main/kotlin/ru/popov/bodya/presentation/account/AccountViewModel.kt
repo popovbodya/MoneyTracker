@@ -10,6 +10,7 @@ import ru.popov.bodya.core.rx.RxSchedulers
 import ru.popov.bodya.core.rx.RxSchedulersTransformer
 import ru.popov.bodya.domain.currency.CurrencyInteractor
 import ru.popov.bodya.domain.currency.model.Currency
+import ru.popov.bodya.domain.currency.model.CurrencyAmount
 import ru.popov.bodya.domain.currency.model.Rates
 import ru.popov.bodya.domain.transactions.TransactionsInteractor
 import ru.popov.bodya.domain.transactions.models.Transaction
@@ -23,7 +24,7 @@ class AccountViewModel @Inject constructor(
         private val rxSchedulers: RxSchedulers,
         private val rxSchedulersTransformer: RxSchedulersTransformer) : AppViewModel() {
 
-    val currentBalanceLiveData = MutableLiveData<Resource<Double>>()
+    val currentBalanceLiveData = MutableLiveData<CurrencyAmount>()
     val transactionsLiveData = MutableLiveData<Resource<List<Transaction>>>()
     val incomeLiveData = MutableLiveData<Double>()
     val expenseLiveData = MutableLiveData<Double>()
@@ -31,6 +32,7 @@ class AccountViewModel @Inject constructor(
     val eurExchangeRateLiveData = MutableLiveData<Resource<Double>>()
 
     private var currentCurrency = Currency.RUB
+    private var currentWallet = WalletType.CASH
 
     fun fetchInitialData() {
 
@@ -41,7 +43,7 @@ class AccountViewModel @Inject constructor(
                     eurExchangeRateLiveData.postValue(Resource.success(currencyInteractor.getEurRate(rates.eur)))
                 }
                 .doOnError { usdExchangeRateLiveData.postValue(Resource.error("", 0.0)) }
-                .flatMap { transactionsInteractor.getAllTransactionsByWallet(WalletType.BANK_ACCOUNT) }
+                .flatMap { transactionsInteractor.getAllTransactionsByWallet(currentWallet) }
                 .doOnSuccess { transactionsLiveData.postValue(Resource.success(it)) }
                 .observeOn(rxSchedulers.computationScheduler())
                 .map { getTransactionsPair(it) }
@@ -55,7 +57,7 @@ class AccountViewModel @Inject constructor(
                 }
                 .map { getAmount(it) }
                 .compose(rxSchedulersTransformer.ioToMainTransformerSingle())
-                .subscribe { amount -> currentBalanceLiveData.postValue(Resource.success(amount)) }
+                .subscribe { amount -> currentBalanceLiveData.postValue(CurrencyAmount(amount, currentCurrency)) }
                 .connect(compositeDisposable)
     }
 
@@ -65,6 +67,11 @@ class AccountViewModel @Inject constructor(
             R.id.euro_radio_button -> Currency.EUR
             else -> Currency.RUB
         }
+        fetchInitialData()
+    }
+
+    fun onWalletChanged(walletType: WalletType) {
+        currentWallet = walletType
         fetchInitialData()
     }
 

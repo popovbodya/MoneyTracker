@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/wallet"
+        android:icon="@drawable/ic_wallet_24dp"
+        android:title="@string/wallet"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/cashWallet"
+                android:title="@string/wallet"/>
+            <item
+                android:id="@+id/creditWallet"
+                android:title="@string/credit_card"/>
+            <item
+                android:id="@+id/bankWallet"
+                android:title="@string/bank_account"/>
+        </menu>
+    </item>
+</menu>

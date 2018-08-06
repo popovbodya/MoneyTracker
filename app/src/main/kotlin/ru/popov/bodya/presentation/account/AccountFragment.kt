@@ -3,18 +3,21 @@ package ru.popov.bodya.presentation.account
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.widget.Toolbar
+import android.view.*
 import android.widget.Toast
 import com.lounah.moneytracker.data.entities.Status
 import com.lounah.wallettracker.R
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_wallet.*
 import ru.popov.bodya.core.mvwhatever.AppFragment
+import ru.popov.bodya.domain.currency.model.Currency
+import ru.popov.bodya.domain.currency.model.CurrencyAmount
 import ru.popov.bodya.domain.transactions.models.Transaction
+import ru.popov.bodya.domain.transactions.models.WalletType
 import ru.popov.bodya.presentation.common.Screens.ADD_NEW_TRANSACTION_SCREEN
 import ru.popov.bodya.presentation.transactions.TransactionsRVAdapter
 import ru.terrakok.cicerone.Router
@@ -41,11 +44,12 @@ class AccountFragment : AppFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val parentView = inflater.inflate(R.layout.fragment_wallet, container, false)
         setHasOptionsMenu(true)
+        initToolbar(parentView)
         return parentView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         initUI()
     }
 
@@ -65,11 +69,46 @@ class AccountFragment : AppFragment() {
         removeObservers()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.account_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.cashWallet -> {
+                viewModel.onWalletChanged(WalletType.CASH)
+                changeToolbarTitle(getString(R.string.wallet))
+                return true
+            }
+            R.id.creditWallet -> {
+                viewModel.onWalletChanged(WalletType.CREDIT_CARD)
+                changeToolbarTitle(getString(R.string.credit_card))
+                return true
+            }
+            R.id.bankWallet -> {
+                viewModel.onWalletChanged(WalletType.BANK_ACCOUNT)
+                changeToolbarTitle(getString(R.string.bank_account))
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun initUI() {
         initFab()
         initCurrenciesRadioGroup()
         initTransactionsList()
-        initCurrencies()
+    }
+
+    private fun initToolbar(parentView: View) {
+        val toolbar = parentView.findViewById<Toolbar>(R.id.toolbar)
+        val activity = activity as AppCompatActivity
+        activity.setSupportActionBar(toolbar)
+    }
+
+    private fun changeToolbarTitle(title: String) {
+        toolbar.title = title
     }
 
     private fun initFab() {
@@ -111,16 +150,8 @@ class AccountFragment : AppFragment() {
         })
     }
 
-    private fun initCurrencies() {}
-
     private fun subscribeToViewModel() {
-        viewModel.currentBalanceLiveData.observe(this, Observer { resource ->
-            when (resource?.status) {
-                Status.SUCCESS -> resource.data?.let { processSuccessBalanceResponse(resource.data) }
-                Status.LOADING -> processLoadingState()
-                Status.ERROR -> processErrorState()
-            }
-        })
+        viewModel.currentBalanceLiveData.observe(this, Observer { currencyAmount -> currencyAmount?.let { showCurrencyAmount(currencyAmount) } })
 
         viewModel.transactionsLiveData.observe(this, Observer { resource ->
             when (resource?.status) {
@@ -190,9 +221,14 @@ class AccountFragment : AppFragment() {
         progressBar.visibility = View.VISIBLE
     }
 
-    private fun processSuccessBalanceResponse(amount: Double) {
-        tv_balance.setSymbol(getString(R.string.rub_sign))
-        tv_balance.amount = amount.toFloat()
+    private fun showCurrencyAmount(currencyAmount: CurrencyAmount) {
+        tv_balance.setSymbol(
+                when (currencyAmount.currency) {
+                    Currency.RUB -> getString(R.string.rub_sign)
+                    Currency.EUR -> getString(R.string.euro_sign)
+                    Currency.USD -> getString(R.string.dollar_sign)
+                })
+        tv_balance.amount = currencyAmount.amount.toFloat()
     }
 
     private fun processSuccessTransactionsResponse(data: List<Transaction>) {
