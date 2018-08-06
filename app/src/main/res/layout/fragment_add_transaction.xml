@@ -1,214 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            app:title="@string/create_transaction" />
+            app:title="@string/create_transaction"/>
     </android.support.design.widget.AppBarLayout>
 
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/transaction_sum_text_input_layout"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar">
+        android:layout_marginTop="?android:attr/actionBarSize">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/transaction_sum_edit_text"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/transaction_amount"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:orientation="vertical">
 
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/transaction_sum_text_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp">
 
-    <TextView
-        android:id="@+id/transaction_currency_text_view"
-        style="@style/TextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="@string/transaction_currency"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/transaction_sum_text_input_layout" />
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/transaction_sum_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/transaction_amount"
+                    android:inputType="numberDecimal"/>
+            </android.support.design.widget.TextInputLayout>
 
+            <TextView
+                android:id="@+id/transaction_currency_text_view"
+                style="@style/TextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/transaction_currency"/>
 
-    <info.hoang8f.android.segmented.SegmentedGroup
-        android:id="@+id/rg_currencies"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:orientation="horizontal"
-        android:weightSum="3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/transaction_currency_text_view"
-        app:sc_border_width="1dp"
-        app:sc_checked_text_color="@color/white"
-        app:sc_corner_radius="4dp"
-        app:sc_tint_color="@color/black">
+            <info.hoang8f.android.segmented.SegmentedGroup
+                android:id="@+id/rg_currencies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                app:sc_border_width="1dp"
+                app:sc_checked_text_color="@color/white"
+                app:sc_corner_radius="4dp"
+                app:sc_tint_color="@color/black">
 
-        <RadioButton
-            android:id="@+id/btn_rub"
-            style="@style/RadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/rub" />
+                <RadioButton
+                    android:id="@+id/btn_rub"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/rub"/>
 
-        <RadioButton
-            android:id="@+id/btn_eur"
-            style="@style/RadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/eur" />
+                <RadioButton
+                    android:id="@+id/btn_eur"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/eur"/>
 
-        <RadioButton
-            android:id="@+id/btn_usd"
-            style="@style/RadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/usd" />
+                <RadioButton
+                    android:id="@+id/btn_usd"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/usd"/>
+            </info.hoang8f.android.segmented.SegmentedGroup>
 
-    </info.hoang8f.android.segmented.SegmentedGroup>
+            <TextView
+                android:id="@+id/transaction_category_text_view"
+                style="@style/TextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:gravity="center"
+                android:text="@string/transaction_category"/>
 
-    <TextView
-        android:id="@+id/transaction_category_text_view"
-        style="@style/TextStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:gravity="center"
-        android:text="@string/transaction_category"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rg_currencies" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/categories_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:orientation="horizontal"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/categories_recycler_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:orientation="horizontal"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/transaction_category_text_view" />
+            <TextView
+                android:id="@+id/tv_transaction_wallet"
+                style="@style/TextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/transaction_wallet"/>
 
-    <TextView
-        android:id="@+id/tv_transaction_wallet"
-        style="@style/TextStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="@string/transaction_wallet"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categories_recycler_view" />
+            <info.hoang8f.android.segmented.SegmentedGroup
+                android:id="@+id/wallets_segmented_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:weightSum="3"
+                app:sc_border_width="1dp"
+                app:sc_checked_text_color="@color/white"
+                app:sc_corner_radius="4dp"
+                app:sc_tint_color="@color/black">
 
-    <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/wallets_segmented_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:weightSum="3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_transaction_wallet"
-        segmentedgroup:sc_border_width="1dp"
-        segmentedgroup:sc_checked_text_color="@color/white"
-        segmentedgroup:sc_corner_radius="4dp"
-        segmentedgroup:sc_tint_color="@color/black">
+                <RadioButton
+                    android:id="@+id/cash_radio_button"
+                    style="@style/RadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="4dp"
+                    android:text="@string/cash"
+                    android:textAllCaps="true"/>
 
-        <RadioButton
-            android:id="@+id/cash_radio_button"
-            style="@style/RadioButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="4dp"
-            android:text="@string/cash"
-            android:textAllCaps="true" />
+                <RadioButton
+                    android:id="@+id/credit_radio_button"
+                    style="@style/RadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="4dp"
+                    android:text="@string/credit_card"
+                    android:textAllCaps="true"/>
 
-        <RadioButton
-            android:id="@+id/credit_radio_button"
-            style="@style/RadioButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="4dp"
-            android:text="@string/credit_card"
-            android:textAllCaps="true" />
+                <RadioButton
+                    android:id="@+id/bank_account_radio_button"
+                    style="@style/RadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="4dp"
+                    android:text="@string/bank_account"
+                    android:textAllCaps="true"/>
+            </info.hoang8f.android.segmented.SegmentedGroup>
 
-        <RadioButton
-            android:id="@+id/bank_account_radio_button"
-            style="@style/RadioButton"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="4dp"
-            android:text="@string/bank_account"
-            android:textAllCaps="true" />
-    </info.hoang8f.android.segmented.SegmentedGroup>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/comment_text_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/comment_text_input_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/wallets_segmented_group">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/comment_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/transaction_commentary"
+                    android:inputType="textShortMessage"
+                    android:padding="16dp"
+                    android:singleLine="true"/>
+            </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/comment_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/transaction_commentary"
-            android:inputType="textShortMessage"
-            android:padding="16dp"
-            android:singleLine="true" />
+            <Button
+                android:id="@+id/btn_create_transaction"
+                style="@android:style/Widget.Material.Button.Borderless.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/app_margin"
+                android:layout_marginTop="16dp"
+                android:text="@string/create"/>
 
-    </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_create_transaction"
-        style="@android:style/Widget.Material.Button.Borderless.Colored"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/app_margin"
-        android:layout_marginTop="16dp"
-        android:text="@string/create"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/comment_text_input_layout" />
-</android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+</FrameLayout>
+
 
