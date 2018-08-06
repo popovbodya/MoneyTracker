@@ -2,6 +2,7 @@ package ru.popov.bodya.presentation.account
 
 import android.arch.lifecycle.MutableLiveData
 import com.lounah.moneytracker.data.entities.Resource
+import com.lounah.wallettracker.R
 import io.reactivex.functions.BiFunction
 import ru.popov.bodya.core.extensions.connect
 import ru.popov.bodya.core.mvwhatever.AppViewModel
@@ -28,6 +29,8 @@ class AccountViewModel @Inject constructor(
     val expenseLiveData = MutableLiveData<Double>()
     val usdExchangeRateLiveData = MutableLiveData<Resource<Double>>()
     val eurExchangeRateLiveData = MutableLiveData<Resource<Double>>()
+
+    private var currentCurrency = Currency.RUB
 
     fun fetchInitialData() {
 
@@ -56,10 +59,19 @@ class AccountViewModel @Inject constructor(
                 .connect(compositeDisposable)
     }
 
+    fun onCurrencyRadioGroupClick(radioButtonId: Int) {
+        currentCurrency = when (radioButtonId) {
+            R.id.usd_radio_button -> Currency.USD
+            R.id.euro_radio_button -> Currency.EUR
+            else -> Currency.RUB
+        }
+        fetchInitialData()
+    }
+
     private fun getAmount(pair: Pair<Double, Double>): Double = pair.first - pair.second
 
     private fun getListPairAmounts(pair: Pair<List<Transaction>, List<Transaction>>, rates: Rates): Pair<Double, Double> =
-            Pair(getTransactionListAmount(pair.first, rates), getTransactionListAmount(pair.second, rates))
+            Pair(getTransactionListAmountWithCurrency(pair.first, rates), getTransactionListAmountWithCurrency(pair.second, rates))
 
     private fun getTransactionsPair(transactionList: List<Transaction>): Pair<List<Transaction>, List<Transaction>> {
         val incomeList: MutableList<Transaction> = mutableListOf()
@@ -73,8 +85,14 @@ class AccountViewModel @Inject constructor(
         return Pair(incomeList, exposeList)
     }
 
-    private fun getTransactionListAmount(transactionList: List<Transaction>, rates: Rates): Double =
-            transactionList.sumByDouble { getTransactionAmount(it, rates) }
+    private fun getTransactionListAmountWithCurrency(transactionList: List<Transaction>, rates: Rates): Double {
+        val transactionListAmountInRubles = transactionList.sumByDouble { getTransactionAmount(it, rates) }
+        return when (currentCurrency) {
+            Currency.RUB -> transactionListAmountInRubles
+            Currency.EUR -> transactionListAmountInRubles * rates.eur
+            Currency.USD -> transactionListAmountInRubles * rates.usd
+        }
+    }
 
     private fun getTransactionAmount(transaction: Transaction, rates: Rates): Double {
         return when (transaction.currency) {

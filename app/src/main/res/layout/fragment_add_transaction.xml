@@ -62,7 +62,7 @@
                 app:sc_tint_color="@color/black">
 
                 <RadioButton
-                    android:id="@+id/btn_rub"
+                    android:id="@+id/rub_radio_button"
                     style="@style/RadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                     android:text="@string/rub"/>
 
                 <RadioButton
-                    android:id="@+id/btn_eur"
+                    android:id="@+id/euro_radio_button"
                     style="@style/RadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                     android:text="@string/eur"/>
 
                 <RadioButton
-                    android:id="@+id/btn_usd"
+                    android:id="@+id/usd_radio_button"
                     style="@style/RadioButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -86,11 +86,9 @@ class AccountFragment : AppFragment() {
     }
 
     private fun initCurrenciesRadioGroup() {
-        rg_currencies.check(R.id.btn_rub)
+        rg_currencies.check(R.id.rub_radio_button)
         rg_currencies.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-
-            }
+            viewModel.onCurrencyRadioGroupClick(checkedId)
         }
     }
 

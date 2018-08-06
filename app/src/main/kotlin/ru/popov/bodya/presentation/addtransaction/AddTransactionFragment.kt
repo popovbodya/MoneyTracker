@@ -178,9 +178,9 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
 
         rg_currencies.setOnCheckedChangeListener { group, checkedId ->
             when (checkedId) {
-                R.id.btn_rub -> selectedCurrency = Currency.RUB
-                R.id.btn_usd -> selectedCurrency = Currency.USD
-                R.id.btn_eur -> selectedCurrency = Currency.EUR
+                R.id.rub_radio_button -> selectedCurrency = Currency.RUB
+                R.id.usd_radio_button -> selectedCurrency = Currency.USD
+                R.id.euro_radio_button -> selectedCurrency = Currency.EUR
             }
         }
         wallets_segmented_group.setOnCheckedChangeListener { group, checkedId ->
