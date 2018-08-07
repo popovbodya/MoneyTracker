@@ -10,11 +10,16 @@ import dagger.Provides
 import ru.popov.bodya.core.dagger.ApplicationContext
 import ru.popov.bodya.data.database.AppDatabase
 import ru.popov.bodya.data.database.preferences.SharedPreferencesWrapper
+import ru.popov.bodya.data.database.transactions.dao.PeriodicalTransactionsDao
 import ru.popov.bodya.data.database.transactions.dao.TransactionsDao
 import javax.inject.Singleton
 
 @Module
 class PersistenceModule {
+
+    @Singleton
+    @Provides
+    fun providePeriodicalTransactionsDao(db: AppDatabase): PeriodicalTransactionsDao = db.periodicalTransactionsDao
 
     @Singleton
     @Provides

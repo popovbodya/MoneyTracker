@@ -31,11 +31,11 @@ class TransactionsRepository(private val transactionsDao: TransactionsDao,
                         .map { transactionsEntityConverter.convert(it) }
             }
 
-    fun addIncomeTransaction(transaction: Transaction): Completable {
+    fun addTransaction(transaction: Transaction): Completable {
         return Completable.fromAction { transactionsDao.insert(transactionsEntityConverter.reverse(transaction)) }
     }
 
-    fun addExpenseTransaction(transaction: Transaction): Completable {
-        return Completable.fromAction { transactionsDao.insert(transactionsEntityConverter.reverse(transaction)) }
+    fun addTransactionList(transactionList: List<Transaction>) {
+        transactionsDao.insertAll(transactionsEntityConverter.reverseList(transactionList))
     }
 }

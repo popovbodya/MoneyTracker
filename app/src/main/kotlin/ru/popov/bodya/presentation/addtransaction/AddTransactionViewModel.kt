@@ -1,10 +1,10 @@
 package ru.popov.bodya.presentation.addtransaction
 
 import android.arch.lifecycle.MutableLiveData
-import com.lounah.moneytracker.data.entities.Resource
 import ru.popov.bodya.core.mvwhatever.AppViewModel
 import ru.popov.bodya.core.rx.RxSchedulersTransformer
 import ru.popov.bodya.domain.currency.model.Currency
+import ru.popov.bodya.domain.transactions.PeriodicalTransactionsInteractor
 import ru.popov.bodya.domain.transactions.TransactionsInteractor
 import ru.popov.bodya.domain.transactions.models.ExpenseCategory
 import ru.popov.bodya.domain.transactions.models.IncomeCategory
@@ -20,11 +20,11 @@ import javax.inject.Inject
  *  @author popovbodya
  */
 class AddTransactionViewModel @Inject constructor(private val transactionsInteractor: TransactionsInteractor,
+                                                  private val periodicalTransactionsInteractor: PeriodicalTransactionsInteractor,
                                                   private val rxSchedulersTransformer: RxSchedulersTransformer,
                                                   private val router: Router) : AppViewModel() {
 
     val transactionCategoriesLiveData = MutableLiveData<List<TransactionsCategory>>()
-    val transactionAddStatus = MutableLiveData<Resource<Boolean>>()
 
     fun fetchTransactionCategories(isIncome: Boolean) {
         transactionCategoriesLiveData.value = when (isIncome) {
@@ -33,26 +33,18 @@ class AddTransactionViewModel @Inject constructor(private val transactionsIntera
         }
     }
 
+    fun onHomeButtonClicked() {
+        router.exit()
+    }
+
     fun onAddTransactionButtonClick(selectedWallet: WalletType, selectedCategory: TransactionsCategory, selectedCurrency: Currency, amount: Double, comment: String) {
-        transactionAddStatus.postValue(Resource.loading(false))
-        when (selectedCategory) {
-            is Income -> {
-                transactionsInteractor.addIncomeTransaction(selectedWallet, selectedCategory, selectedCurrency, amount, Calendar.getInstance().time, comment)
-                        .compose(rxSchedulersTransformer.ioToMainTransformerCompletable())
-                        .subscribe(
-                                { transactionAddStatus.postValue(Resource.success(true)) },
-                                { transactionAddStatus.postValue(Resource.error("", false)) }
-                        )
-            }
-            is Expense -> {
-                transactionsInteractor.addExpenseTransaction(selectedWallet, selectedCategory, selectedCurrency, amount, Calendar.getInstance().time, comment)
-                        .compose(rxSchedulersTransformer.ioToMainTransformerCompletable())
-                        .subscribe(
-                                { transactionAddStatus.postValue(Resource.success(true)) },
-                                { transactionAddStatus.postValue(Resource.error("", false)) }
-                        )
-            }
-        }
+        val currentTime = Calendar.getInstance().timeInMillis
+        periodicalTransactionsInteractor.createTransaction(selectedWallet, selectedCategory, selectedCurrency, amount, currentTime, comment, 60000)
+                .compose(rxSchedulersTransformer.ioToMainTransformerCompletable())
+                .subscribe(
+                        { router.exit() },
+                        { router.showSystemMessage("Transaction create failed") }
+                )
     }
 
     private fun getAllIncomeTransaction(): ArrayList<Income> {
@@ -67,3 +59,5 @@ class AddTransactionViewModel @Inject constructor(private val transactionsIntera
         return expenseList
     }
 }
+
+

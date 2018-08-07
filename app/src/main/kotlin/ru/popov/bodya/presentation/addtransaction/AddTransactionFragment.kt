@@ -11,41 +11,29 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.jakewharton.rxbinding2.widget.RxTextView
-import com.lounah.moneytracker.data.entities.Status
 import com.lounah.moneytracker.ui.wallet.addtransaction.AddTransactionView
 import com.lounah.moneytracker.ui.wallet.addtransaction.CategoriesRVAdapter
 import com.lounah.wallettracker.R
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 import kotlinx.android.synthetic.main.fragment_add_transaction.*
 import ru.popov.bodya.core.mvwhatever.AppFragment
 import ru.popov.bodya.domain.currency.model.Currency
 import ru.popov.bodya.domain.transactions.models.TransactionsCategory
 import ru.popov.bodya.domain.transactions.models.WalletType
-import ru.terrakok.cicerone.Router
 import timber.log.Timber
 import javax.inject.Inject
 
 class AddTransactionFragment : AppFragment(), AddTransactionView {
 
     @Inject
-    lateinit var router: Router
-    @Inject
     lateinit var factory: ViewModelProvider.Factory
     @Inject
     lateinit var viewModel: AddTransactionViewModel
 
     private lateinit var categoriesAdapter: CategoriesRVAdapter
-    private lateinit var inputDisposable: Disposable
-
     private lateinit var selectedWallet: WalletType
     private lateinit var selectedCurrency: Currency
     private lateinit var selectedCategory: TransactionsCategory
-    private lateinit var comment: String
-    private var amount: Double = 0.0
     private var isIncome = false
 
     companion object {
@@ -91,14 +79,13 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
 
     override fun onStop() {
         super.onStop()
-        inputDisposable.dispose()
         removeObservers()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                router.exit()
+                viewModel.onHomeButtonClicked()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -114,15 +101,6 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
             categoriesList?.apply {
                 selectedCategory = this[0]
                 categoriesAdapter.setCategoriesList(this)
-            }
-        })
-
-        viewModel.transactionAddStatus.observe(this, Observer { resource ->
-            when (resource?.status) {
-                Status.SUCCESS -> router.exitWithMessage("Transaction added!")
-                Status.ERROR -> router.showSystemMessage("Transaction addition failed")
-                Status.LOADING -> router.showSystemMessage("Loading")
-                null -> router.showSystemMessage("Transaction addition failed")
             }
         })
     }
@@ -156,23 +134,25 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
     }
 
     private fun initInputListeners() {
-        val inputObserver: Observable<Boolean> = Observable.combineLatest(
-                RxTextView.textChanges(transaction_sum_edit_text),
-                RxTextView.textChanges(comment_edit_text),
-                BiFunction { amount, comment ->
-                    amount.isNotEmpty()
-                            && this::selectedCurrency.isInitialized
-                            && comment.isNotEmpty()
-                            && rg_currencies.checkedRadioButtonId != -1
-                            && wallets_segmented_group.checkedRadioButtonId != -1
-                })
-        inputDisposable = inputObserver.subscribe(btn_create_transaction::setEnabled)
+//        val inputObserver: Observable<Boolean> = Observable.combineLatest(
+//                RxTextView.textChanges(transaction_sum_edit_text),
+//                RxTextView.textChanges(comment_edit_text),
+//                BiFunction { amount, comment ->
+//                    amount.isNotEmpty()
+//                            && this::selectedCurrency.isInitialized
+//                            && comment.isNotEmpty()
+//                            && rg_currencies.checkedRadioButtonId != -1
+//                            && wallets_segmented_group.checkedRadioButtonId != -1
+//                })
+//        inputDisposable = inputObserver.subscribe(btn_create_transaction::setEnabled)
     }
 
     private fun initCreateTransactionButton() {
         btn_create_transaction.setOnClickListener {
-            amount = transaction_sum_edit_text.text.toString().toDouble()
-            comment = comment_edit_text.text.toString()
+            val amount = transaction_sum_edit_text.text.toString().toDouble()
+            val comment = comment_edit_text.text.toString()
+            transaction_sum_edit_text.clearFocus()
+            comment_edit_text.clearFocus()
             viewModel.onAddTransactionButtonClick(selectedWallet, selectedCategory, selectedCurrency, amount, comment)
         }
     }
@@ -197,7 +177,6 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
 
     private fun removeObservers() {
         viewModel.transactionCategoriesLiveData.removeObservers(this)
-        viewModel.transactionAddStatus.removeObservers(this)
     }
 
     interface OnItemSelectedCallback {

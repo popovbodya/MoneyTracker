@@ -12,14 +12,17 @@ import ru.popov.bodya.domain.currency.CurrencyInteractor
 import ru.popov.bodya.domain.currency.model.Currency
 import ru.popov.bodya.domain.currency.model.CurrencyAmount
 import ru.popov.bodya.domain.currency.model.Rates
+import ru.popov.bodya.domain.transactions.PeriodicalTransactionsInteractor
 import ru.popov.bodya.domain.transactions.TransactionsInteractor
 import ru.popov.bodya.domain.transactions.models.Transaction
-import ru.popov.bodya.domain.transactions.models.TransactionsCategory
 import ru.popov.bodya.domain.transactions.models.WalletType
+import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 class AccountViewModel @Inject constructor(
         private val transactionsInteractor: TransactionsInteractor,
+        private val periodicalTransactionsInteractor: PeriodicalTransactionsInteractor,
         private val currencyInteractor: CurrencyInteractor,
         private val rxSchedulers: RxSchedulers,
         private val rxSchedulersTransformer: RxSchedulersTransformer) : AppViewModel() {
@@ -34,28 +37,31 @@ class AccountViewModel @Inject constructor(
     private var currentCurrency = Currency.RUB
     private var currentWallet = WalletType.CASH
 
-    fun fetchInitialData() {
-
+    fun fetchAccountData() {
+        val currentTime = Calendar.getInstance().timeInMillis
         currencyInteractor.getCachedExchangeRate()
                 .doOnSubscribe { usdExchangeRateLiveData.postValue(Resource.loading(0.0)) }
                 .doOnSuccess { rates: Rates ->
                     usdExchangeRateLiveData.postValue(Resource.success(currencyInteractor.getUsdRate(rates.usd)))
                     eurExchangeRateLiveData.postValue(Resource.success(currencyInteractor.getEurRate(rates.eur)))
                 }
-                .doOnError { usdExchangeRateLiveData.postValue(Resource.error("", 0.0)) }
+                .flatMap { periodicalTransactionsInteractor.getAllPeriodicalTransactionsByWallet(currentWallet) }
+                .map { periodicalTransactionsInteractor.createTransactionListBasedOnPeriodicalTransactions(it, currentTime) }
+                .doOnSuccess { transactionsInteractor.addTransactionList(it) }
                 .flatMap { transactionsInteractor.getAllTransactionsByWallet(currentWallet) }
                 .doOnSuccess { transactionsLiveData.postValue(Resource.success(it)) }
                 .observeOn(rxSchedulers.computationScheduler())
-                .map { getTransactionsPair(it) }
+                .map { transactionsInteractor.getTransactionsPair(it) }
                 .zipWith(currencyInteractor.getCachedExchangeRate(),
                         BiFunction { pair: Pair<List<Transaction>, List<Transaction>>, rates: Rates ->
+                            Timber.d("${Thread.currentThread()}")
                             getListPairAmounts(pair, rates)
                         })
                 .doOnSuccess {
                     incomeLiveData.postValue(it.first)
                     expenseLiveData.postValue(it.second)
                 }
-                .map { getAmount(it) }
+                .map { transactionsInteractor.getPairDiff(it) }
                 .compose(rxSchedulersTransformer.ioToMainTransformerSingle())
                 .subscribe { amount -> currentBalanceLiveData.postValue(CurrencyAmount(amount, currentCurrency)) }
                 .connect(compositeDisposable)
@@ -67,30 +73,17 @@ class AccountViewModel @Inject constructor(
             R.id.euro_radio_button -> Currency.EUR
             else -> Currency.RUB
         }
-        fetchInitialData()
+        fetchAccountData()
     }
 
     fun onWalletChanged(walletType: WalletType) {
         currentWallet = walletType
-        fetchInitialData()
+        fetchAccountData()
     }
-
-    private fun getAmount(pair: Pair<Double, Double>): Double = pair.first - pair.second
 
     private fun getListPairAmounts(pair: Pair<List<Transaction>, List<Transaction>>, rates: Rates): Pair<Double, Double> =
             Pair(getTransactionListAmountWithCurrency(pair.first, rates), getTransactionListAmountWithCurrency(pair.second, rates))
 
-    private fun getTransactionsPair(transactionList: List<Transaction>): Pair<List<Transaction>, List<Transaction>> {
-        val incomeList: MutableList<Transaction> = mutableListOf()
-        val exposeList: MutableList<Transaction> = mutableListOf()
-        transactionList.forEach { transaction ->
-            when (transaction.category) {
-                is TransactionsCategory.Expense -> exposeList.add(transaction)
-                is TransactionsCategory.Income -> incomeList.add(transaction)
-            }
-        }
-        return Pair(incomeList, exposeList)
-    }
 
     private fun getTransactionListAmountWithCurrency(transactionList: List<Transaction>, rates: Rates): Double {
         val transactionListAmountInRubles = transactionList.sumByDouble { getTransactionAmount(it, rates) }

@@ -56,7 +56,7 @@ class AccountFragment : AppFragment() {
     override fun onStart() {
         super.onStart()
         subscribeToViewModel()
-        viewModel.fetchInitialData()
+        viewModel.fetchAccountData()
     }
 
     override fun onResume() {
