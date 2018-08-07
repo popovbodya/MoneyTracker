@@ -2,6 +2,7 @@ package ru.popov.bodya.app
 
 import android.app.Activity
 import android.app.Application
+import com.facebook.stetho.Stetho
 import com.lounah.wallettracker.BuildConfig
 import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
@@ -21,6 +22,7 @@ class MoneyTrackerApplication : Application(), HasActivityInjector {
         AppInjector.init(this)
         installLeakCanary()
         installTimber()
+        Stetho.initializeWithDefaults(this);
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = dispatchingAndroidInjector

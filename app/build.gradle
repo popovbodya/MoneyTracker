@@ -90,6 +90,7 @@ dependencies {
     implementation libraries.retrofitGsonConverter
     implementation libraries.retrofitRxJavaAdapter
     // developer utils
+    implementation libraries.stetho
     debugImplementation libraries.leakCanary
     releaseImplementation libraries.leakCanaryNoOp
     implementation libraries.timber
