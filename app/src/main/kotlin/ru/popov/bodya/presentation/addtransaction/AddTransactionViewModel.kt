@@ -68,10 +68,11 @@ class AddTransactionViewModel @Inject constructor(private val transactionsIntera
                     )
 
             else -> periodicalTransactionsInteractor.createTransaction(selectedWallet, selectedCategory, selectedCurrency, amount, currentTime, comment, currentPeriod)
+                    .andThen(transactionsInteractor.addTransaction(selectedWallet, selectedCategory, selectedCurrency, amount, currentTime, comment))
                     .compose(rxSchedulersTransformer.ioToMainTransformerCompletable())
                     .subscribe(
                             { router.exit() },
-                            { router.showSystemMessage("Transaction create failed") }
+                            { router.showSystemMessage("Periodical transaction create failed") }
                     )
         }
     }
