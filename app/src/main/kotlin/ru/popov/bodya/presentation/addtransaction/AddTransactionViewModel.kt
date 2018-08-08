@@ -24,7 +24,13 @@ class AddTransactionViewModel @Inject constructor(private val transactionsIntera
                                                   private val rxSchedulersTransformer: RxSchedulersTransformer,
                                                   private val router: Router) : AppViewModel() {
 
+    companion object {
+        private const val ONE_HOUR_IN_MS: Long = 3600000
+        private const val ONE_DAY_IN_MS: Long = 86400000
+    }
+
     val transactionCategoriesLiveData = MutableLiveData<List<TransactionsCategory>>()
+    private var currentPeriod: Long = 0
 
     fun fetchTransactionCategories(isIncome: Boolean) {
         transactionCategoriesLiveData.value = when (isIncome) {
@@ -37,9 +43,22 @@ class AddTransactionViewModel @Inject constructor(private val transactionsIntera
         router.exit()
     }
 
+    fun onTransactionPeriodChanged(period: Int) {
+        currentPeriod = when (period) {
+            0 -> 0
+            1 -> ONE_HOUR_IN_MS
+            2 -> ONE_HOUR_IN_MS * 12
+            3 -> ONE_DAY_IN_MS
+            4 -> ONE_DAY_IN_MS * 2
+            5 -> ONE_DAY_IN_MS * 7
+            6 -> ONE_DAY_IN_MS * 30
+            else -> 0
+        }
+    }
+
     fun onAddTransactionButtonClick(selectedWallet: WalletType, selectedCategory: TransactionsCategory, selectedCurrency: Currency, amount: Double, comment: String) {
         val currentTime = Calendar.getInstance().timeInMillis
-        periodicalTransactionsInteractor.createTransaction(selectedWallet, selectedCategory, selectedCurrency, amount, currentTime, comment, 60000)
+        periodicalTransactionsInteractor.createTransaction(selectedWallet, selectedCategory, selectedCurrency, amount, currentTime, comment, currentPeriod)
                 .compose(rxSchedulersTransformer.ioToMainTransformerCompletable())
                 .subscribe(
                         { router.exit() },

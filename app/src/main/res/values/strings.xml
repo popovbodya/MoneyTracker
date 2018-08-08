@@ -34,13 +34,19 @@
     <string name="current_balance">Текущий баланс</string>
     <string name="create_transaction">Добавить транзакцию</string>
     <string name="transaction_category">Категория транзакции</string>
-    <string name="periodic_transaction">Повторение транзакции</string>
     <string name="transaction_wallet">Кошелек транзакции</string>
     <string name="credit_card">Кредитная карта</string>
     <string name="bank_account">Банковский счет</string>
     <string name="wallet">Кошелек</string>
     <string name="settings">Настройки</string>
     <string name="log_out">Выйти</string>
+    <string name="periodic_transaction_no_repetition">Без повторений</string>
+    <string name="periodic_transaction_1_hour">Повторение каждый час</string>
+    <string name="periodic_transaction_12_hour">Повторение каждые полдня</string>
+    <string name="periodic_transaction_1_day">Повторение каждый день</string>
+    <string name="periodic_transaction_2_day">Повторение каждые два дня</string>
+    <string name="periodic_transaction_7_day">Повторение каждую неделю</string>
+    <string name="periodic_transaction_1_month">Повторение каждый месяц</string>
 
     <string name="all_transactions">Все транзакции</string>
     <string name="incomes">Доходы</string>

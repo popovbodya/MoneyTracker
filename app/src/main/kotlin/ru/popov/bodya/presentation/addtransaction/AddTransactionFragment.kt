@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import android.widget.Toast
 import com.lounah.moneytracker.ui.wallet.addtransaction.AddTransactionView
 import com.lounah.moneytracker.ui.wallet.addtransaction.CategoriesRVAdapter
@@ -145,6 +146,27 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
 //                            && wallets_segmented_group.checkedRadioButtonId != -1
 //                })
 //        inputDisposable = inputObserver.subscribe(btn_create_transaction::setEnabled)
+
+
+        seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+
+                periodic_transaction_text_view.text = when (progress) {
+                    0 -> resources.getString(R.string.periodic_transaction_no_repetition)
+                    1 -> resources.getString(R.string.periodic_transaction_1_hour)
+                    2 -> resources.getString(R.string.periodic_transaction_12_hour)
+                    3 -> resources.getString(R.string.periodic_transaction_1_day)
+                    4 -> resources.getString(R.string.periodic_transaction_2_day)
+                    5 -> resources.getString(R.string.periodic_transaction_7_day)
+                    6 -> resources.getString(R.string.periodic_transaction_1_month)
+                    else -> resources.getString(R.string.periodic_transaction_no_repetition)
+                }
+                viewModel.onTransactionPeriodChanged(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
     }
 
     private fun initCreateTransactionButton() {
