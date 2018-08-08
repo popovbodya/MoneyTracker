@@ -22,10 +22,14 @@ class MoneyTrackerApplication : Application(), HasActivityInjector {
         AppInjector.init(this)
         installLeakCanary()
         installTimber()
-        Stetho.initializeWithDefaults(this);
+        installStetho()
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = dispatchingAndroidInjector
+
+    private fun installStetho() {
+        Stetho.initializeWithDefaults(this)
+    }
 
     private fun installLeakCanary() {
         if (LeakCanary.isInAnalyzerProcess(this)) {

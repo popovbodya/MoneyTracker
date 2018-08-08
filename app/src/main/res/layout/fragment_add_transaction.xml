@@ -30,7 +30,7 @@
                 android:id="@+id/transaction_sum_text_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp">
+                android:layout_margin="8dp">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/transaction_sum_edit_text"
@@ -39,6 +39,26 @@
                     android:hint="@string/transaction_amount"
                     android:inputType="numberDecimal"/>
             </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/comment_text_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/comment_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/transaction_commentary"
+                    android:inputType="textShortMessage"
+                    android:singleLine="true"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
 
             <TextView
                 android:id="@+id/transaction_currency_text_view"
@@ -53,7 +73,7 @@
                 android:id="@+id/rg_currencies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_margin="8dp"
                 android:orientation="horizontal"
                 android:weightSum="3"
                 app:sc_border_width="1dp"
@@ -86,22 +106,6 @@
                     android:text="@string/usd"/>
             </info.hoang8f.android.segmented.SegmentedGroup>
 
-            <TextView
-                android:id="@+id/transaction_category_text_view"
-                style="@style/TextStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:gravity="center"
-                android:text="@string/transaction_category"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/categories_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:orientation="horizontal"
-                app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
             <TextView
                 android:id="@+id/tv_transaction_wallet"
@@ -112,13 +116,14 @@
                 android:gravity="center"
                 android:text="@string/transaction_wallet"/>
 
+
             <info.hoang8f.android.segmented.SegmentedGroup
                 android:id="@+id/wallets_segmented_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
+                android:layout_margin="8dp"
                 android:orientation="horizontal"
-                android:padding="8dp"
+
                 android:weightSum="3"
                 app:sc_border_width="1dp"
                 app:sc_checked_text_color="@color/white"
@@ -156,21 +161,46 @@
                     android:textAllCaps="true"/>
             </info.hoang8f.android.segmented.SegmentedGroup>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/comment_text_input_layout"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+
+            <TextView
+                android:id="@+id/periodic_transaction_text_view"
+                style="@style/TextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp">
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/periodic_transaction"/>
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/comment_edit_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/transaction_commentary"
-                    android:inputType="textShortMessage"
-                    android:padding="16dp"
-                    android:singleLine="true"/>
-            </android.support.design.widget.TextInputLayout>
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="5"/>
+
+            <TextView
+                android:id="@+id/transaction_category_text_view"
+                style="@style/TextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/transaction_category"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/categories_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="horizontal"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
 
             <Button
                 android:id="@+id/btn_create_transaction"
