@@ -9,8 +9,8 @@ import ru.popov.bodya.domain.transactions.TransactionsInteractor
 import ru.popov.bodya.domain.transactions.models.ExpenseCategory
 import ru.popov.bodya.domain.transactions.models.IncomeCategory
 import ru.popov.bodya.domain.transactions.models.TransactionsCategory
-import ru.popov.bodya.domain.transactions.models.TransactionsCategory.Expense
-import ru.popov.bodya.domain.transactions.models.TransactionsCategory.Income
+import ru.popov.bodya.domain.transactions.models.TransactionsCategory.ExpenseTransactionsCategory
+import ru.popov.bodya.domain.transactions.models.TransactionsCategory.IncomeTransactionsCategory
 import ru.popov.bodya.domain.transactions.models.WalletType
 import ru.terrakok.cicerone.Router
 import java.util.*
@@ -58,23 +58,33 @@ class AddTransactionViewModel @Inject constructor(private val transactionsIntera
 
     fun onAddTransactionButtonClick(selectedWallet: WalletType, selectedCategory: TransactionsCategory, selectedCurrency: Currency, amount: Double, comment: String) {
         val currentTime = Calendar.getInstance().timeInMillis
-        periodicalTransactionsInteractor.createTransaction(selectedWallet, selectedCategory, selectedCurrency, amount, currentTime, comment, currentPeriod)
-                .compose(rxSchedulersTransformer.ioToMainTransformerCompletable())
-                .subscribe(
-                        { router.exit() },
-                        { router.showSystemMessage("Transaction create failed") }
-                )
+
+        when (currentPeriod) {
+            0L -> transactionsInteractor.addTransaction(selectedWallet, selectedCategory, selectedCurrency, amount, currentTime, comment)
+                    .compose(rxSchedulersTransformer.ioToMainTransformerCompletable())
+                    .subscribe(
+                            { router.exit() },
+                            { router.showSystemMessage("Transaction create failed") }
+                    )
+
+            else -> periodicalTransactionsInteractor.createTransaction(selectedWallet, selectedCategory, selectedCurrency, amount, currentTime, comment, currentPeriod)
+                    .compose(rxSchedulersTransformer.ioToMainTransformerCompletable())
+                    .subscribe(
+                            { router.exit() },
+                            { router.showSystemMessage("Transaction create failed") }
+                    )
+        }
     }
 
-    private fun getAllIncomeTransaction(): ArrayList<Income> {
-        val incomeList = arrayListOf<Income>()
-        IncomeCategory.values().mapTo(incomeList) { Income(it) }
+    private fun getAllIncomeTransaction(): ArrayList<IncomeTransactionsCategory> {
+        val incomeList = arrayListOf<IncomeTransactionsCategory>()
+        IncomeCategory.values().mapTo(incomeList) { IncomeTransactionsCategory(it) }
         return incomeList
     }
 
-    private fun getAllExpenseTransaction(): ArrayList<Expense> {
-        val expenseList = arrayListOf<Expense>()
-        ExpenseCategory.values().mapTo(expenseList) { Expense(it) }
+    private fun getAllExpenseTransaction(): ArrayList<ExpenseTransactionsCategory> {
+        val expenseList = arrayListOf<ExpenseTransactionsCategory>()
+        ExpenseCategory.values().mapTo(expenseList) { ExpenseTransactionsCategory(it) }
         return expenseList
     }
 }

@@ -1,7 +1,7 @@
 package com.lounah.moneytracker.util
 
-import ru.popov.bodya.domain.transactions.models.ExpenseCategory
 import com.lounah.wallettracker.R
+import ru.popov.bodya.domain.transactions.models.ExpenseCategory
 import ru.popov.bodya.domain.transactions.models.IncomeCategory
 import ru.popov.bodya.domain.transactions.models.TransactionsCategory
 
@@ -10,13 +10,13 @@ class ResourcesSelector private constructor() {
     companion object {
 
         fun fromTransactionCategoryToString(type: TransactionsCategory) = when (type) {
-            is TransactionsCategory.Expense -> getExpenseTransactionName(type.expenseCategory)
-            is TransactionsCategory.Income -> getIncomeTransactionName(type.incomeCategory)
+            is TransactionsCategory.ExpenseTransactionsCategory -> getExpenseTransactionName(type.expenseCategory)
+            is TransactionsCategory.IncomeTransactionsCategory -> getIncomeTransactionName(type.incomeCategory)
         }
 
         fun fromTransactionCategoryToDrawable(type: TransactionsCategory) = when (type) {
-            is TransactionsCategory.Expense -> getExpenseTransactionDrawable(type.expenseCategory)
-            is TransactionsCategory.Income -> getIncomeTransactionDrawable(type.incomeCategory)
+            is TransactionsCategory.ExpenseTransactionsCategory -> getExpenseTransactionDrawable(type.expenseCategory)
+            is TransactionsCategory.IncomeTransactionsCategory -> getIncomeTransactionDrawable(type.incomeCategory)
         }
 
         private fun getIncomeTransactionDrawable(incomeCategory: IncomeCategory): Int = when (incomeCategory) {

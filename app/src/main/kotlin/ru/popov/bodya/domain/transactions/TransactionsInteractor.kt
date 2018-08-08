@@ -39,8 +39,8 @@ class TransactionsInteractor(private val transactionsRepository: TransactionsRep
         val exposeList: MutableList<Transaction> = mutableListOf()
         transactionList.forEach { transaction ->
             when (transaction.category) {
-                is TransactionsCategory.Expense -> exposeList.add(transaction)
-                is TransactionsCategory.Income -> incomeList.add(transaction)
+                is TransactionsCategory.ExpenseTransactionsCategory -> exposeList.add(transaction)
+                is TransactionsCategory.IncomeTransactionsCategory -> incomeList.add(transaction)
             }
         }
         return Pair(incomeList, exposeList)

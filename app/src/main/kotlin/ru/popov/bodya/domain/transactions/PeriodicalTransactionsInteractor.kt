@@ -1,6 +1,5 @@
 package ru.popov.bodya.domain.transactions
 
-import android.util.Log
 import io.reactivex.Completable
 import io.reactivex.Single
 import ru.popov.bodya.data.repositories.PeriodicalTransactionsRepository
@@ -24,11 +23,10 @@ class PeriodicalTransactionsInteractor(private val periodicalTransactionsReposit
     }
 
     fun createTransaction(selectedWallet: WalletType, selectedCategory: TransactionsCategory, selectedCurrency: Currency, amount: Double, time: Long, comment: String, period: Long): Completable {
-        return periodicalTransactionsRepository.addPeriodicalTransaction(PeriodicalTransaction(DEFAULT_ID, selectedWallet, selectedCurrency, selectedCategory, amount, time, comment, period))
+        return periodicalTransactionsRepository.addPeriodicalTransaction(PeriodicalTransaction(DEFAULT_ID, selectedWallet, selectedCurrency, selectedCategory, amount, time - period, comment, period))
     }
 
     fun createTransactionListBasedOnPeriodicalTransactions(periodicalTransactionList: List<PeriodicalTransaction>, currentTimeInMillis: Long): List<Transaction> {
-        Log.e("bodya", "createTransactionListBasedOnPeriodicalTransactions")
         val transactionList = mutableListOf<Transaction>()
         periodicalTransactionList.forEach {
             val count = (currentTimeInMillis - it.timeCreated) / it.period

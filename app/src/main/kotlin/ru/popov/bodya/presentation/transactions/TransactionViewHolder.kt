@@ -22,7 +22,7 @@ class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         transaction_category_text_view.text = itemView.resources.getString(ResourcesSelector.fromTransactionCategoryToString(item.category))
         currency_type_image_view.setImageResource(ResourcesSelector.fromTransactionCategoryToDrawable(item.category))
 
-        if (item.category is TransactionsCategory.Expense) {
+        if (item.category is TransactionsCategory.ExpenseTransactionsCategory) {
             tv_amount.setBaseColor(itemView.resources.getColor(R.color.colorExpense))
             tv_amount.setDecimalsColor(itemView.resources.getColor(R.color.colorExpense))
         } else {

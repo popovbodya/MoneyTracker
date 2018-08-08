@@ -147,7 +147,6 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
 //                })
 //        inputDisposable = inputObserver.subscribe(btn_create_transaction::setEnabled)
 
-
         seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
 
