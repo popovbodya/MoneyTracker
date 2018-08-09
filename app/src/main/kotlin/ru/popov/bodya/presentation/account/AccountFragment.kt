@@ -4,11 +4,11 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.VERTICAL
 import android.support.v7.widget.Toolbar
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import android.widget.Toast
 import com.lounah.moneytracker.data.entities.Status
@@ -21,12 +21,15 @@ import ru.popov.bodya.domain.currency.model.CurrencyAmount
 import ru.popov.bodya.domain.transactions.models.Transaction
 import ru.popov.bodya.domain.transactions.models.WalletType
 import ru.popov.bodya.presentation.common.Screens.ADD_NEW_TRANSACTION_SCREEN
+import ru.popov.bodya.presentation.common.SwipeToDeleteCallback
+import ru.popov.bodya.presentation.transactions.OnTransactionDeletedListener
 import ru.popov.bodya.presentation.transactions.TransactionsRecyclerAdapter
 import ru.terrakok.cicerone.Router
 import java.text.DecimalFormat
 import javax.inject.Inject
 
-class AccountFragment : AppFragment() {
+
+class AccountFragment : AppFragment(), OnTransactionDeletedListener {
 
     @Inject
     lateinit var router: Router
@@ -97,6 +100,10 @@ class AccountFragment : AppFragment() {
         }
     }
 
+    override fun onTransactionDeleted(transaction: Transaction) {
+        viewModel.onTransactionDeleted(transaction)
+    }
+
     private fun initUI() {
         initFab()
         initCurrenciesRadioGroup()
@@ -140,22 +147,32 @@ class AccountFragment : AppFragment() {
     }
 
     private fun initTransactionsList() {
-        transactionsAdapter = TransactionsRecyclerAdapter()
+        transactionsAdapter = TransactionsRecyclerAdapter(this)
         transactions_recycler_view.adapter = transactionsAdapter
         transactions_recycler_view.layoutManager = LinearLayoutManager(context)
+        transactions_recycler_view.itemAnimator = DefaultItemAnimator()
         transactions_recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                if (dy > 20 && fab_add.visibility == View.VISIBLE) {
+                if (dy > 10 && fab_add.visibility == View.VISIBLE) {
                     fab_add.collapse()
                     fab_add.visibility = View.GONE
                     return
                 }
-                if (dy < -20 && fab_add.visibility != View.VISIBLE) {
+                if (dy < -10 && fab_add.visibility != View.VISIBLE) {
                     fab_add.visibility = View.VISIBLE
                     return
                 }
             }
         })
+
+        val swipeHandler = object : SwipeToDeleteCallback(context!!) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = transactions_recycler_view.adapter as TransactionsRecyclerAdapter
+                adapter.removeItem(viewHolder.adapterPosition)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(transactions_recycler_view)
     }
 
     private fun subscribeToViewModel() {

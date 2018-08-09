@@ -53,6 +53,10 @@ class TransactionsRepository(private val transactionsDao: TransactionsDao,
         return Completable.fromAction { transactionsDao.insert(transactionsEntityConverter.reverse(transaction)) }
     }
 
+    fun removeTransaction(transaction: Transaction): Completable {
+        return Completable.fromAction { transactionsDao.deleteTransaction(transaction.transactionId) }
+    }
+
     fun addTransactionList(transactionList: List<Transaction>) {
         transactionsDao.insertAll(transactionsEntityConverter.reverseList(transactionList))
     }

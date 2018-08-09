@@ -3,6 +3,7 @@ package ru.popov.bodya.presentation.account
 import android.arch.lifecycle.MutableLiveData
 import com.lounah.moneytracker.data.entities.Resource
 import com.lounah.wallettracker.R
+import io.reactivex.SingleTransformer
 import io.reactivex.functions.BiFunction
 import ru.popov.bodya.core.extensions.connect
 import ru.popov.bodya.core.mvwhatever.AppViewModel
@@ -43,32 +44,15 @@ class AccountViewModel @Inject constructor(
     private var currentCurrency = Currency.RUB
     private var currentWallet = WalletType.CASH
 
+
     fun fetchAccountData() {
         val currentTime = Calendar.getInstance().timeInMillis
-        currencyInteractor.getCachedExchangeRate()
-                .doOnSubscribe { usdExchangeRateLiveData.postValue(Resource.loading(0.0)) }
-                .doOnSuccess { rates: Rates ->
-                    usdExchangeRateLiveData.postValue(Resource.success(currencyInteractor.getUsdRate(rates.usd)))
-                    eurExchangeRateLiveData.postValue(Resource.success(currencyInteractor.getEurRate(rates.eur)))
-                }
-                .flatMap { periodicalTransactionsInteractor.getAllPeriodicalTransactionsByWallet(currentWallet) }
+        periodicalTransactionsInteractor.getAllPeriodicalTransactionsByWallet(currentWallet)
                 .map { periodicalTransactionsInteractor.createTransactionListBasedOnPeriodicalTransactions(it, currentTime) }
                 .doOnSuccess { transactionsInteractor.addTransactionList(it) }
                 .flatMap { calendarInteractor.getCurrentMonthTransactions(currentWallet, currentTime) }
                 .doOnSuccess { transactionsLiveData.postValue(Resource.success(it)) }
-                .observeOn(rxSchedulers.computationScheduler())
-                .map { transactionsInteractor.getTransactionsPair(it) }
-                .zipWith(currencyInteractor.getCachedExchangeRate(),
-                        BiFunction { pair: Pair<List<Transaction>, List<Transaction>>, rates: Rates ->
-                            Timber.d("${Thread.currentThread()}")
-                            getListPairAmounts(pair, rates)
-                        })
-                .doOnSuccess {
-                    incomeLiveData.postValue(it.first)
-                    expenseLiveData.postValue(it.second)
-                }
-                .map { transactionsInteractor.getPairDiff(it) }
-                .compose(rxSchedulersTransformer.ioToMainTransformerSingle())
+                .compose(fetchTransactionsBasedData())
                 .subscribe { amount -> currentBalanceLiveData.postValue(CurrencyAmount(amount, currentCurrency)) }
                 .connect(compositeDisposable)
     }
@@ -97,9 +81,41 @@ class AccountViewModel @Inject constructor(
         fetchAccountData()
     }
 
+    fun onTransactionDeleted(transaction: Transaction) {
+        val currentTime = Calendar.getInstance().timeInMillis
+        transactionsInteractor.removeTransaction(transaction)
+                .toSingle { true }
+                .flatMap { calendarInteractor.getCurrentMonthTransactions(currentWallet, currentTime) }
+                .compose(fetchTransactionsBasedData())
+                .subscribe { amount -> currentBalanceLiveData.postValue(CurrencyAmount(amount, currentCurrency)) }
+                .connect(compositeDisposable)
+    }
+
+    private fun fetchTransactionsBasedData(): SingleTransformer<List<Transaction>, Double> {
+        return SingleTransformer {
+            it.observeOn(rxSchedulers.computationScheduler())
+                    .map { transactionsInteractor.getTransactionsPair(it) }
+                    .zipWith(
+                            currencyInteractor.getCachedExchangeRate().doOnSuccess { rates: Rates ->
+                                usdExchangeRateLiveData.postValue(Resource.success(currencyInteractor.getUsdRate(rates.usd)))
+                                eurExchangeRateLiveData.postValue(Resource.success(currencyInteractor.getEurRate(rates.eur)))
+                            },
+                            BiFunction { pair: Pair<List<Transaction>, List<Transaction>>, rates: Rates ->
+                                Timber.d("${Thread.currentThread()}")
+                                getListPairAmounts(pair, rates)
+                            })
+                    .doOnSuccess {
+                        incomeLiveData.postValue(it.first)
+                        expenseLiveData.postValue(it.second)
+                    }
+                    .map { transactionsInteractor.getPairDiff(it) }
+                    .compose(rxSchedulersTransformer.ioToMainTransformerSingle())
+                    .doOnSubscribe { usdExchangeRateLiveData.postValue(Resource.loading(0.0)) }
+        }
+    }
+
     private fun getListPairAmounts(pair: Pair<List<Transaction>, List<Transaction>>, rates: Rates): Pair<Double, Double> =
             Pair(getTransactionListAmountWithCurrency(pair.first, rates), getTransactionListAmountWithCurrency(pair.second, rates))
-
 
     private fun getTransactionListAmountWithCurrency(transactionList: List<Transaction>, rates: Rates): Double {
         val transactionListAmountInRubles = transactionList.sumByDouble { getTransactionAmount(it, rates) }

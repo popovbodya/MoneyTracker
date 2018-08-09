@@ -231,26 +231,28 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
+            android:id="@+id/current_month_transactions_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="16dp"
             android:text="@string/all_transactions"
-            android:textAppearance="@style/TextStyle" />
+            android:textAppearance="@style/TextStyle"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/transactions_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/current_month_transactions_text_view" />
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu

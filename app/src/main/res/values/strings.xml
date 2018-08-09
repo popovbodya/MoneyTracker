@@ -56,6 +56,7 @@
 
     <string name="statistic_income_title">Доходы: %s</string>
     <string name="statistic_expense_title">Расходы: %s</string>
+    <string name="statistic_no_data">Транзакций не найдено</string>
 
     <string name="developers">Разработчики</string>
     <string name="confidentiality_policy">Политика конфиденциальности</string>

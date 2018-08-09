@@ -34,6 +34,10 @@ class TransactionsInteractor(private val transactionsRepository: TransactionsRep
         transactionsRepository.addTransactionList(transactionList)
     }
 
+    fun removeTransaction(transaction: Transaction): Completable {
+        return transactionsRepository.removeTransaction(transaction)
+    }
+
     fun getTransactionsPair(transactionList: List<Transaction>): Pair<List<Transaction>, List<Transaction>> {
         val incomeList: MutableList<Transaction> = mutableListOf()
         val exposeList: MutableList<Transaction> = mutableListOf()
@@ -47,7 +51,5 @@ class TransactionsInteractor(private val transactionsRepository: TransactionsRep
     }
 
     fun getPairDiff(pair: Pair<Double, Double>): Double = pair.first - pair.second
-
-
 
 }

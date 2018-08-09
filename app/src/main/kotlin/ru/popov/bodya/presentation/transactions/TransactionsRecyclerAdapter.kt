@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import com.lounah.wallettracker.R
 import ru.popov.bodya.domain.transactions.models.Transaction
 
-class TransactionsRecyclerAdapter : RecyclerView.Adapter<TransactionViewHolder>() {
+class TransactionsRecyclerAdapter(private val onTransactionDeletedListener: OnTransactionDeletedListener) : RecyclerView.Adapter<TransactionViewHolder>() {
 
     private val transactions = mutableListOf<Transaction>()
 
@@ -22,7 +22,13 @@ class TransactionsRecyclerAdapter : RecyclerView.Adapter<TransactionViewHolder>(
         holder.bind(action)
     }
 
-    // TODO: USE DIFF UTIL
+    fun removeItem(position: Int) {
+        val transaction = transactions[position]
+        transactions.removeAt(position)
+        notifyItemRemoved(position)
+        onTransactionDeletedListener.onTransactionDeleted(transaction)
+    }
+
     fun updateDataSet(transactionList: List<Transaction>) {
         this.transactions.clear()
         transactions.addAll(transactionList)

@@ -12,17 +12,20 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.Description
+import com.github.mikephil.charting.data.PieData
+import com.lounah.moneytracker.data.entities.Status
 import com.lounah.wallettracker.R
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.statistics_fragment_layout.*
+import kotlinx.android.synthetic.main.viewer_zero_layout.*
 import ru.popov.bodya.core.mvwhatever.AppFragment
 import ru.popov.bodya.domain.transactions.models.Transaction
 import ru.popov.bodya.domain.transactions.models.WalletType
 import ru.popov.bodya.presentation.common.translatedNameId
 import ru.popov.bodya.presentation.statistics.MonthPagerAdapter.Companion.INITIAL_VALUE
 import ru.popov.bodya.presentation.statistics.model.StatisticsInitialData
+import ru.popov.bodya.presentation.transactions.OnTransactionDeletedListener
 import ru.popov.bodya.presentation.transactions.TransactionsRecyclerAdapter
 import java.util.*
 import javax.inject.Inject
@@ -30,7 +33,7 @@ import javax.inject.Inject
 /**
  *  @author popovbodya
  */
-class StatisticsFragment : AppFragment() {
+class StatisticsFragment : AppFragment(), OnTransactionDeletedListener {
 
     companion object {
 
@@ -61,6 +64,7 @@ class StatisticsFragment : AppFragment() {
     private lateinit var currentDate: Date
     private lateinit var currentWallet: WalletType
     private var isIncome: Boolean = false
+    private var isDataCanBeShown: Boolean = false
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -109,6 +113,8 @@ class StatisticsFragment : AppFragment() {
         }
     }
 
+    override fun onTransactionDeleted(transaction: Transaction) {}
+
     private fun initToolbar(parentView: View) {
         setHasOptionsMenu(true)
         val activity = activity as AppCompatActivity
@@ -123,7 +129,7 @@ class StatisticsFragment : AppFragment() {
     }
 
     private fun initAdapters() {
-        transactionsAdapter = TransactionsRecyclerAdapter()
+        transactionsAdapter = TransactionsRecyclerAdapter(this)
         transactions_recycler_view.adapter = transactionsAdapter
         transactions_recycler_view.layoutManager = LinearLayoutManager(context)
         transactions_recycler_view.isNestedScrollingEnabled = false
@@ -148,26 +154,44 @@ class StatisticsFragment : AppFragment() {
     }
 
     private fun subscribeToViewModel() {
+
         viewModel.transactionsLiveData.observe(this, Observer { transactions ->
             transactions?.let { processSuccessTransactionsResponse(it) }
         })
 
-        viewModel.pieDataSetLiveData.observe(this, Observer { pieData ->
-            pieData?.let {
-                val description = Description()
-                description.text = toolbar.title.toString()
-                chart.data = pieData
-                chart.description = description
-                chart.isRotationEnabled = false
-                chart.setUsePercentValues(false)
-                chart.visibility = View.VISIBLE
-                chart.animateY(1400)
+        viewModel.pieDataSetLiveData.observe(this, Observer { resource ->
+            resource?.let {
+                when {
+                    resource.status == Status.SUCCESS && resource.data != null -> fillChartWithDataAndAnimate(resource.data)
+                    else -> showData(false)
+                }
             }
         })
     }
 
-    private fun processSuccessTransactionsResponse(data: List<Transaction>) {
-        transactionsAdapter.updateDataSet(data)
+    private fun fillChartWithDataAndAnimate(data: PieData) {
+        val description = Description()
+        description.text = toolbar.title.toString()
+        chart.data = data
+        chart.description = description
+        chart.isRotationEnabled = false
+        chart.setUsePercentValues(false)
+        chart.invalidate()
     }
 
+    private fun processSuccessTransactionsResponse(data: List<Transaction>) {
+        if (data.isEmpty()) {
+            showData(false)
+        } else {
+            showData(true)
+            transactionsAdapter.updateDataSet(data)
+        }
+    }
+
+    private fun showData(show: Boolean) {
+        isDataCanBeShown = show
+        chart.visibility = if (show) View.VISIBLE else View.GONE
+        transactions_recycler_view.visibility = if (show) View.VISIBLE else View.GONE
+        zero_layout.visibility = if (show) View.GONE else View.VISIBLE
+    }
 }

@@ -2,11 +2,9 @@ package ru.popov.bodya.presentation.statistics
 
 import android.arch.lifecycle.MutableLiveData
 import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
 import com.lounah.moneytracker.data.entities.Resource
 import io.reactivex.Single
 import io.reactivex.functions.Consumer
-import io.reactivex.functions.Predicate
 import ru.popov.bodya.core.mvwhatever.AppViewModel
 import ru.popov.bodya.core.rx.RxSchedulers
 import ru.popov.bodya.core.rx.RxSchedulersTransformer
@@ -27,7 +25,7 @@ class StatisticsViewModel @Inject constructor(private val calendarInteractor: Ca
                                               private val router: Router) : AppViewModel() {
 
     val transactionsLiveData = MutableLiveData<List<Transaction>>()
-    val pieDataSetLiveData = MutableLiveData<PieData>()
+    val pieDataSetLiveData = MutableLiveData<Resource<PieData>>()
 
     fun fetchCurrentMonthTransactions(isIncome: Boolean, walletType: WalletType, currentDate: Long) {
 
@@ -41,7 +39,13 @@ class StatisticsViewModel @Inject constructor(private val calendarInteractor: Ca
                 .observeOn(schedulers.computationScheduler())
                 .flatMap { statisticsInteractor.createPieDataSetBasedOnTransactionCategoriesSingle(it) }
                 .compose(rxSchedulersTransformer.ioToMainTransformerSingle())
-                .subscribe(Consumer { pieDataSetLiveData.postValue(it) })
+                .subscribe(Consumer {
+                    if (it.dataSet.entryCount == 0) {
+                        pieDataSetLiveData.postValue(Resource.error("empty data", null))
+                    } else {
+                        pieDataSetLiveData.postValue(Resource.success(it))
+                    }
+                })
     }
 
     fun onHomeButtonClick() {
