@@ -17,4 +17,6 @@
     <color name="colorExpense">#d50000</color>
     <color name="colorIncome">#00c853</color>
     <color name="black_semi_transparent">#B2000000</color>
+
+    <color name="statistics_month_card_view_color">#ffeb3b</color>
 </resources>

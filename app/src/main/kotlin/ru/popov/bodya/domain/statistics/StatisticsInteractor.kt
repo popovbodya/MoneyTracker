@@ -1,0 +1,62 @@
+package ru.popov.bodya.domain.statistics
+
+import com.github.mikephil.charting.data.Entry
+import ru.popov.bodya.data.repositories.CurrenciesRepository
+import ru.popov.bodya.domain.currency.model.Currency
+import ru.popov.bodya.domain.transactions.models.Transaction
+import ru.popov.bodya.domain.transactions.models.TransactionsCategory
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import android.R.attr.entries
+import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.utils.ColorTemplate.rgb
+import io.reactivex.Single
+
+
+/**
+ *  @author popovbodya
+ */
+class StatisticsInteractor(private val currenciesRepository: CurrenciesRepository) {
+
+    fun createPieDataSetBasedOnTransactionCategoriesSingle(transactionList: List<Transaction>): Single<PieData> =
+            Single.fromCallable { createPieDataSetBasedOnTransactionCategories(transactionList) }
+
+    private fun createPieDataSetBasedOnTransactionCategories(transactionList: List<Transaction>): PieData {
+        val entriesList: MutableList<PieEntry> = mutableListOf()
+        val categoriesMap = getTransactionCategoriesMap(transactionList)
+        categoriesMap.entries.forEach { (category, amount) ->
+            entriesList.add(PieEntry(amount.toFloat(), category))
+        }
+        val pieDataSet = PieDataSet(entriesList, "Categories")
+        pieDataSet.valueTextSize = 12F
+        pieDataSet.valueTextColor = rgb("#FFFFFF")
+        pieDataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
+        return PieData(pieDataSet)
+    }
+
+    private fun getTransactionCategoriesMap(transactionList: List<Transaction>): Map<String, Double> {
+        val transactionCategoriesMap = mutableMapOf<String, Double>()
+        for (transaction in transactionList) {
+            val name = when (transaction.category) {
+                is TransactionsCategory.ExpenseTransactionsCategory -> transaction.category.expenseCategory.name
+                is TransactionsCategory.IncomeTransactionsCategory -> transaction.category.incomeCategory.name
+            }
+            val currentAmount = transactionCategoriesMap[name]
+            if (currentAmount == null) {
+                transactionCategoriesMap[name] = getOperationAmount(transaction)
+            } else {
+                transactionCategoriesMap[name] = currentAmount + getOperationAmount(transaction)
+            }
+        }
+        return transactionCategoriesMap
+    }
+
+    private fun getOperationAmount(transaction: Transaction): Double {
+        return when (transaction.currency) {
+            Currency.USD -> (1.toDouble() / currenciesRepository.getCachedExchangeRate().usd) * transaction.amount
+            Currency.EUR -> (1.toDouble() / currenciesRepository.getCachedExchangeRate().eur) * transaction.amount
+            Currency.RUB -> transaction.amount
+        }
+    }
+}

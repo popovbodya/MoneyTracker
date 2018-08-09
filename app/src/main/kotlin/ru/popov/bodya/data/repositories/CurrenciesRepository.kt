@@ -16,15 +16,17 @@ class CurrenciesRepository(private val exchangeRateApiWrapper: ExchangeRateApiWr
                            private val ratesEntityBeanConverter: RatesEntityBeanConverter,
                            private val ratesEntityConverter: RatesEntityConverter) {
 
-    fun getExchangeRate(): Single<Rates> = exchangeRateApiWrapper
+    fun getExchangeRateSingle(): Single<Rates> = exchangeRateApiWrapper
             .getCurrentRate()
             .map { ratesEntityBeanConverter.convert(it.rates) }
             .doOnSuccess { saveExchangeRate(it) }
             .map { ratesEntityConverter.convert(it) }
 
-    fun getCachedExchangeRate(): Single<Rates> =
+    fun getCachedExchangeRateSingle(): Single<Rates> =
             Single.fromCallable { sharedPreferencesWrapper.getRatesEntity() }
                     .map { ratesEntityConverter.convert(it) }
+
+    fun getCachedExchangeRate(): Rates = ratesEntityConverter.convert(sharedPreferencesWrapper.getRatesEntity())
 
     private fun saveExchangeRate(ratesEntity: RatesEntity) {
         sharedPreferencesWrapper.saveRatesEntity(ratesEntity)

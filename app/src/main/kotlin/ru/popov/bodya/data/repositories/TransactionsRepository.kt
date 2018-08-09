@@ -33,7 +33,19 @@ class TransactionsRepository(private val transactionsDao: TransactionsDao,
 
     fun getTransactionsByWalletAndDate(walletType: WalletType, startDate: Long, endDate: Long): Single<List<Transaction>> =
             Single.fromCallable {
-                transactionsDao.getAllTransactionByDate(walletType, startDate, endDate)
+                transactionsDao.getAllTransactionsByWalletAndDate(walletType, startDate, endDate)
+                        .map { transactionsEntityConverter.convert(it) }
+            }
+
+    fun getIncomeTransactionsByWalletAndDate(walletType: WalletType, startDate: Long, endDate: Long): Single<List<Transaction>> =
+            Single.fromCallable {
+                transactionsDao.getIncomeTransactionsByWalletAndDate(walletType, startDate, endDate)
+                        .map { transactionsEntityConverter.convert(it) }
+            }
+
+    fun getExpenseTransactionsByWalletAndDate(walletType: WalletType, startDate: Long, endDate: Long): Single<List<Transaction>> =
+            Single.fromCallable {
+                transactionsDao.getExpenseTransactionsByWalletAndDate(walletType, startDate, endDate)
                         .map { transactionsEntityConverter.convert(it) }
             }
 

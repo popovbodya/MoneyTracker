@@ -2,12 +2,18 @@ package ru.popov.bodya.presentation.statistics
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.Description
 import com.lounah.wallettracker.R
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.statistics_fragment_layout.*
@@ -55,11 +61,8 @@ class StatisticsFragment : AppFragment() {
     private lateinit var currentWallet: WalletType
     private var isIncome: Boolean = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-
-        AndroidSupportInjection.inject(this)
-        super.onCreate(savedInstanceState)
-
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
         arguments?.let {
             val currentTimeLong = it.getLong(CURRENT_TIME, DEFAULT_TIME_VALUE)
             currentDate = Date(currentTimeLong)
@@ -68,8 +71,15 @@ class StatisticsFragment : AppFragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidSupportInjection.inject(this)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.statistics_fragment_layout, container, false)
+        val parentView: View = inflater.inflate(R.layout.statistics_fragment_layout, container, false)
+        initToolbar(parentView)
+        return parentView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,6 +98,33 @@ class StatisticsFragment : AppFragment() {
         viewModel.transactionsLiveData.removeObservers(this)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                viewModel.onHomeButtonClick()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun initToolbar(parentView: View) {
+        setHasOptionsMenu(true)
+        val activity = activity as AppCompatActivity
+        val toolbar = parentView.findViewById<Toolbar>(R.id.toolbar)
+        val walletName = when (currentWallet) {
+            WalletType.CASH -> getString(R.string.cash)
+            WalletType.BANK_ACCOUNT -> getString(R.string.bank_account)
+            WalletType.CREDIT_CARD -> getString(R.string.credit_card)
+        }
+        toolbar.title = when (isIncome) {
+            true -> String.format(Locale.ENGLISH, getString(R.string.statistic_income_title), walletName)
+            false -> String.format(Locale.ENGLISH, getString(R.string.statistic_expense_title), walletName)
+        }
+        activity.setSupportActionBar(toolbar)
+        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    }
+
     private fun initAdapters() {
         transactionsAdapter = TransactionsRecyclerAdapter()
         transactions_recycler_view.adapter = transactionsAdapter
@@ -101,9 +138,9 @@ class StatisticsFragment : AppFragment() {
                 viewModel.fetchCurrentMonthTransactions(isIncome, currentWallet, getCurrentPositionMonthTime(position))
             }
         })
-        month_view_pager.clipToPadding = false;
-        month_view_pager.setPadding(96, 0, 96, 0);
-        month_view_pager.pageMargin = 48;
+        month_view_pager.clipToPadding = false
+        month_view_pager.setPadding(192, 0, 192, 0)
+        month_view_pager.pageMargin = 36
     }
 
     private fun getCurrentPositionMonthTime(currentMonthPosition: Int): Long {
@@ -115,6 +152,20 @@ class StatisticsFragment : AppFragment() {
     private fun subscribeToViewModel() {
         viewModel.transactionsLiveData.observe(this, Observer { transactions ->
             transactions?.let { processSuccessTransactionsResponse(it) }
+        })
+
+        viewModel.pieDataSetLiveData.observe(this, Observer { pieData ->
+            pieData?.let {
+
+                val description = Description()
+                description.text = toolbar.title.toString()
+                chart.data = pieData
+                chart.description = description
+                chart.isRotationEnabled = false
+                chart.setUsePercentValues(false)
+                chart.visibility = View.VISIBLE
+                chart.animateY(1400)
+            }
         })
     }
 

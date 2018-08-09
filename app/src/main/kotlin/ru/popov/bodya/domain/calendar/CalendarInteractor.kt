@@ -14,37 +14,33 @@ import java.util.Calendar.MONTH
  */
 class CalendarInteractor(private val transactionsRepository: TransactionsRepository) {
 
-    fun getCurrentMonthTransactions(walletType: WalletType, currentDate: Long): Single<List<Transaction>> {
+    fun getCurrentMonthTransactions(walletType: WalletType, currentTime: Long): Single<List<Transaction>> {
         val calendar = Calendar.getInstance()
-        calendar.timeInMillis = currentDate
-        calendar.set(DAY_OF_MONTH, 1)
-        val startDate = calendar.timeInMillis
-        calendar.set(DAY_OF_MONTH, calendar.getActualMaximum(MONTH))
-        val endDate = calendar.timeInMillis
         return transactionsRepository
-                .getTransactionsByWalletAndDate(walletType, startDate, endDate)
+                .getTransactionsByWalletAndDate(walletType, getFirstMonthDay(currentTime, calendar), getLastMonthDay(currentTime, calendar))
     }
 
-    fun getNextMonthTransactions(walletType: WalletType, currentDate: Long): Single<List<Transaction>> {
+    fun getCurrentMonthIncomeTransactions(walletType: WalletType, currentTime: Long): Single<List<Transaction>> {
         val calendar = Calendar.getInstance()
-        calendar.timeInMillis = currentDate
-        calendar.add(MONTH, 1)
-        val startDate = calendar.timeInMillis
-        calendar.set(DAY_OF_MONTH, calendar.getActualMaximum(MONTH))
-        val endDate = calendar.timeInMillis
         return transactionsRepository
-                .getTransactionsByWalletAndDate(walletType, startDate, endDate)
+                .getIncomeTransactionsByWalletAndDate(walletType, getFirstMonthDay(currentTime, calendar), getLastMonthDay(currentTime, calendar))
     }
 
-    fun getPreviousMonthTransactions(walletType: WalletType, currentDate: Long): Single<List<Transaction>> {
+    fun getCurrentMonthExpenseTransactions(walletType: WalletType, currentTime: Long): Single<List<Transaction>> {
         val calendar = Calendar.getInstance()
-        calendar.timeInMillis = currentDate
-        calendar.add(MONTH, -1)
-        calendar.set(DAY_OF_MONTH, 1)
-        val startDate = calendar.timeInMillis
-        calendar.set(DAY_OF_MONTH, calendar.getActualMaximum(MONTH))
-        val endDate = calendar.timeInMillis
         return transactionsRepository
-                .getTransactionsByWalletAndDate(walletType, startDate, endDate)
+                .getExpenseTransactionsByWalletAndDate(walletType, getFirstMonthDay(currentTime, calendar), getLastMonthDay(currentTime, calendar))
+    }
+
+    private fun getFirstMonthDay(currentTime: Long, calendar: Calendar): Long {
+        calendar.timeInMillis = currentTime
+        calendar.set(DAY_OF_MONTH, 1)
+        return calendar.timeInMillis
+    }
+
+    private fun getLastMonthDay(currentTime: Long, calendar: Calendar): Long {
+        calendar.timeInMillis = currentTime
+        calendar.set(DAY_OF_MONTH, calendar.getActualMaximum(MONTH))
+        return calendar.timeInMillis
     }
 }

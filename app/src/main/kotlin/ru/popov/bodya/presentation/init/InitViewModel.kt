@@ -20,7 +20,7 @@ class InitViewModel @Inject constructor(private val currencyInteractor: Currency
     val isAllReadyLiveData = MutableLiveData<Boolean>()
 
     fun fetchInitialData() {
-        currencyInteractor.getExchangeRate()
+        currencyInteractor.getCachedExchangeRate()
                 .compose(rxSchedulersTransformer.ioToMainTransformerSingle())
                 .subscribe(Consumer { isAllReadyLiveData.postValue(true) })
                 .connect(compositeDisposable)

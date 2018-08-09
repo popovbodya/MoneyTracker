@@ -9,9 +9,9 @@ import ru.popov.bodya.domain.currency.model.Rates
  */
 class CurrencyInteractor(private val currenciesRepository: CurrenciesRepository) {
 
-    fun getExchangeRate(): Single<Rates> = currenciesRepository.getExchangeRate()
+    fun getExchangeRate(): Single<Rates> = currenciesRepository.getExchangeRateSingle()
 
-    fun getCachedExchangeRate(): Single<Rates> = currenciesRepository.getCachedExchangeRate()
+    fun getCachedExchangeRate(): Single<Rates> = currenciesRepository.getCachedExchangeRateSingle()
 
     fun getUsdRate(usdRate: Double): Double = 1 / usdRate
 

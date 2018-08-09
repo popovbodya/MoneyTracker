@@ -22,6 +22,12 @@ interface TransactionsDao : BaseDao<TransactionEntity> {
     fun getExpenseTransactionsByWallet(wallet: WalletType): List<TransactionEntity>
 
     @Query("SELECT * FROM transactions WHERE  wallet=:wallet AND timeCreated>:startDate AND timeCreated<:endDate ORDER BY timeCreated")
-    fun getAllTransactionByDate(wallet: WalletType, startDate: Long, endDate: Long): List<TransactionEntity>
+    fun getAllTransactionsByWalletAndDate(wallet: WalletType, startDate: Long, endDate: Long): List<TransactionEntity>
+
+    @Query("SELECT * FROM transactions WHERE  wallet=:wallet AND amount>0 AND timeCreated>:startDate AND timeCreated<:endDate ORDER BY timeCreated")
+    fun getIncomeTransactionsByWalletAndDate(wallet: WalletType, startDate: Long, endDate: Long): List<TransactionEntity>
+
+    @Query("SELECT * FROM transactions WHERE  wallet=:wallet AND amount<0 AND timeCreated>:startDate AND timeCreated<:endDate ORDER BY timeCreated")
+    fun getExpenseTransactionsByWalletAndDate(wallet: WalletType, startDate: Long, endDate: Long): List<TransactionEntity>
 
 }
