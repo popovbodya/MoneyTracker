@@ -10,6 +10,7 @@ import ru.popov.bodya.di.common.viewmodel.ViewModelKey
 import ru.popov.bodya.presentation.account.AccountViewModel
 import ru.popov.bodya.presentation.addtransaction.AddTransactionViewModel
 import ru.popov.bodya.presentation.init.InitViewModel
+import ru.popov.bodya.presentation.statistics.StatisticsViewModel
 
 @Module
 interface ViewModelModule {
@@ -31,4 +32,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(InitViewModel::class)
     fun bindInitViewModel(initViewModel: InitViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(StatisticsViewModel::class)
+    fun bindStatisticsViewModel(statisticsViewModel: StatisticsViewModel): StatisticsViewModel
 }

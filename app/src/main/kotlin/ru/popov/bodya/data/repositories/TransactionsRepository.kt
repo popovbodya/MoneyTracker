@@ -31,6 +31,12 @@ class TransactionsRepository(private val transactionsDao: TransactionsDao,
                         .map { transactionsEntityConverter.convert(it) }
             }
 
+    fun getTransactionsByWalletAndDate(walletType: WalletType, startDate: Long, endDate: Long): Single<List<Transaction>> =
+            Single.fromCallable {
+                transactionsDao.getAllTransactionByDate(walletType, startDate, endDate)
+                        .map { transactionsEntityConverter.convert(it) }
+            }
+
     fun addTransaction(transaction: Transaction): Completable {
         return Completable.fromAction { transactionsDao.insert(transactionsEntityConverter.reverse(transaction)) }
     }

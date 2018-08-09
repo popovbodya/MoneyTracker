@@ -11,12 +11,12 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/app_logo"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+        android:theme="@style/MoneyTrackerTheme">
         <activity android:name="ru.popov.bodya.presentation.account.AccountActivity" />
         <activity
             android:name="ru.popov.bodya.presentation.init.InitActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar.Launcher">
+            android:theme="@style/MoneyTrackerTheme.NoActionBar.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -8,6 +8,7 @@ import ru.popov.bodya.core.extensions.connect
 import ru.popov.bodya.core.mvwhatever.AppViewModel
 import ru.popov.bodya.core.rx.RxSchedulers
 import ru.popov.bodya.core.rx.RxSchedulersTransformer
+import ru.popov.bodya.domain.calendar.CalendarInteractor
 import ru.popov.bodya.domain.currency.CurrencyInteractor
 import ru.popov.bodya.domain.currency.model.Currency
 import ru.popov.bodya.domain.currency.model.CurrencyAmount
@@ -16,11 +17,16 @@ import ru.popov.bodya.domain.transactions.PeriodicalTransactionsInteractor
 import ru.popov.bodya.domain.transactions.TransactionsInteractor
 import ru.popov.bodya.domain.transactions.models.Transaction
 import ru.popov.bodya.domain.transactions.models.WalletType
+import ru.popov.bodya.presentation.common.Screens.STATISTICS_SCREEN
+import ru.popov.bodya.presentation.statistics.model.StatisticsInitialData
+import ru.terrakok.cicerone.Router
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
 class AccountViewModel @Inject constructor(
+        private val router: Router,
+        private val calendarInteractor: CalendarInteractor,
         private val transactionsInteractor: TransactionsInteractor,
         private val periodicalTransactionsInteractor: PeriodicalTransactionsInteractor,
         private val currencyInteractor: CurrencyInteractor,
@@ -48,7 +54,7 @@ class AccountViewModel @Inject constructor(
                 .flatMap { periodicalTransactionsInteractor.getAllPeriodicalTransactionsByWallet(currentWallet) }
                 .map { periodicalTransactionsInteractor.createTransactionListBasedOnPeriodicalTransactions(it, currentTime) }
                 .doOnSuccess { transactionsInteractor.addTransactionList(it) }
-                .flatMap { transactionsInteractor.getAllTransactionsByWallet(currentWallet) }
+                .flatMap { calendarInteractor.getCurrentMonthTransactions(currentWallet, currentTime) }
                 .doOnSuccess { transactionsLiveData.postValue(Resource.success(it)) }
                 .observeOn(rxSchedulers.computationScheduler())
                 .map { transactionsInteractor.getTransactionsPair(it) }
@@ -74,6 +80,16 @@ class AccountViewModel @Inject constructor(
             else -> Currency.RUB
         }
         fetchAccountData()
+    }
+
+    fun onIncomeBalanceClick() {
+        val currentTime = Calendar.getInstance().timeInMillis
+        router.navigateTo(STATISTICS_SCREEN, StatisticsInitialData(currentTime, currentWallet, true))
+    }
+
+    fun onExpenseBalanceClick() {
+        val currentTime = Calendar.getInstance().timeInMillis
+        router.navigateTo(STATISTICS_SCREEN, StatisticsInitialData(currentTime, currentWallet, false))
     }
 
     fun onWalletChanged(walletType: WalletType) {

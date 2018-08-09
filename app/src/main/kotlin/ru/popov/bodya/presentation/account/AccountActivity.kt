@@ -17,7 +17,10 @@ import ru.popov.bodya.presentation.addtransaction.AddTransactionFragment
 import ru.popov.bodya.presentation.common.Screens.ABOUT_SCREEN
 import ru.popov.bodya.presentation.common.Screens.ADD_NEW_TRANSACTION_SCREEN
 import ru.popov.bodya.presentation.common.Screens.SETTINGS_SCREEN
+import ru.popov.bodya.presentation.common.Screens.STATISTICS_SCREEN
 import ru.popov.bodya.presentation.common.Screens.WALLET_SCREEN
+import ru.popov.bodya.presentation.statistics.StatisticsFragment
+import ru.popov.bodya.presentation.statistics.model.StatisticsInitialData
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.android.SupportAppNavigator
@@ -70,6 +73,7 @@ class AccountActivity : AppActivity(), HasSupportFragmentInjector {
             return when (screenKey) {
                 WALLET_SCREEN -> AccountFragment()
                 ADD_NEW_TRANSACTION_SCREEN -> AddTransactionFragment.newInstance(data as Boolean)
+                STATISTICS_SCREEN -> StatisticsFragment.newInstance(data as StatisticsInitialData)
                 SETTINGS_SCREEN -> SettingsFragment()
                 ABOUT_SCREEN -> AboutFragment()
                 else -> null

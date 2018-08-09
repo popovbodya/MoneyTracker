@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import com.lounah.wallettracker.R
 import ru.popov.bodya.domain.transactions.models.Transaction
 
-class TransactionsRVAdapter : RecyclerView.Adapter<TransactionViewHolder>() {
+class TransactionsRecyclerAdapter : RecyclerView.Adapter<TransactionViewHolder>() {
 
     private val transactions = mutableListOf<Transaction>()
 

@@ -48,11 +48,13 @@
     <string name="periodic_transaction_7_day">Повторение каждую неделю</string>
     <string name="periodic_transaction_1_month">Повторение каждый месяц</string>
 
-    <string name="all_transactions">Все транзакции</string>
+    <string name="all_transactions">Транзакции за текущий месяц</string>
     <string name="incomes">Доходы</string>
     <string name="expenses">Расходы</string>
     <string name="last_update_time">Обновлено: </string>
     <string name="settings_username">Пользователь</string>
+
+    <string name="statistic_title">Статистика: $s</string>
 
     <string name="developers">Разработчики</string>
     <string name="confidentiality_policy">Политика конфиденциальности</string>

@@ -13,6 +13,7 @@ import ru.popov.bodya.data.network.api.ExchangeRateApiWrapper
 import ru.popov.bodya.data.repositories.CurrenciesRepository
 import ru.popov.bodya.data.repositories.PeriodicalTransactionsRepository
 import ru.popov.bodya.data.repositories.TransactionsRepository
+import ru.popov.bodya.domain.calendar.CalendarInteractor
 import ru.popov.bodya.domain.currency.CurrencyInteractor
 import ru.popov.bodya.domain.transactions.PeriodicalTransactionsInteractor
 import ru.popov.bodya.domain.transactions.TransactionsInteractor
@@ -26,6 +27,9 @@ class AccountModule {
     @Provides
     fun provideCurrenciesInteractor(currenciesRepository: CurrenciesRepository): CurrencyInteractor =
             CurrencyInteractor(currenciesRepository)
+
+    @Provides
+    fun provideCalendarInteractor(transactionsRepository: TransactionsRepository) = CalendarInteractor(transactionsRepository)
 
     @Provides
     fun provideTransactionsInteractor(transactionsRepository: TransactionsRepository): TransactionsInteractor =

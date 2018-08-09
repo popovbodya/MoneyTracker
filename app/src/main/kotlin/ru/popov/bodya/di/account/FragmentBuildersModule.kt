@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import ru.popov.bodya.presentation.account.AccountFragment
 import ru.popov.bodya.presentation.addtransaction.AddTransactionFragment
+import ru.popov.bodya.presentation.statistics.StatisticsFragment
 
 @Module
 abstract class FragmentBuildersModule {
@@ -24,4 +25,7 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeAddTransactionFragment(): AddTransactionFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeStatisticsFragment(): StatisticsFragment
 }

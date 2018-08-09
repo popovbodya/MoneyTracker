@@ -4,8 +4,10 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.RecyclerView.VERTICAL
 import android.support.v7.widget.Toolbar
 import android.view.*
 import android.widget.Toast
@@ -19,7 +21,7 @@ import ru.popov.bodya.domain.currency.model.CurrencyAmount
 import ru.popov.bodya.domain.transactions.models.Transaction
 import ru.popov.bodya.domain.transactions.models.WalletType
 import ru.popov.bodya.presentation.common.Screens.ADD_NEW_TRANSACTION_SCREEN
-import ru.popov.bodya.presentation.transactions.TransactionsRVAdapter
+import ru.popov.bodya.presentation.transactions.TransactionsRecyclerAdapter
 import ru.terrakok.cicerone.Router
 import java.text.DecimalFormat
 import javax.inject.Inject
@@ -34,7 +36,7 @@ class AccountFragment : AppFragment() {
     lateinit var viewModel: AccountViewModel
 
     private val formatter = DecimalFormat("#0.00")
-    private lateinit var transactionsAdapter: TransactionsRVAdapter
+    private lateinit var transactionsAdapter: TransactionsRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -99,6 +101,12 @@ class AccountFragment : AppFragment() {
         initFab()
         initCurrenciesRadioGroup()
         initTransactionsList()
+        initCardViews()
+    }
+
+    private fun initCardViews() {
+        incomes_card_view.setOnClickListener { viewModel.onIncomeBalanceClick() }
+        expenses_card_view.setOnClickListener { viewModel.onExpenseBalanceClick() }
     }
 
     private fun initToolbar(parentView: View) {
@@ -132,10 +140,10 @@ class AccountFragment : AppFragment() {
     }
 
     private fun initTransactionsList() {
-        transactionsAdapter = TransactionsRVAdapter()
-        rv_actions.adapter = transactionsAdapter
-        rv_actions.layoutManager = LinearLayoutManager(context)
-        rv_actions.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        transactionsAdapter = TransactionsRecyclerAdapter()
+        transactions_recycler_view.adapter = transactionsAdapter
+        transactions_recycler_view.layoutManager = LinearLayoutManager(context)
+        transactions_recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
                 if (dy > 20 && fab_add.visibility == View.VISIBLE) {
                     fab_add.collapse()
