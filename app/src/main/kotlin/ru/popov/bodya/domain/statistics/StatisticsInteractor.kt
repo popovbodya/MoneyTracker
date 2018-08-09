@@ -11,13 +11,17 @@ import com.github.mikephil.charting.data.PieEntry
 import android.R.attr.entries
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.github.mikephil.charting.utils.ColorTemplate.rgb
+import com.lounah.wallettracker.R
 import io.reactivex.Single
+import ru.popov.bodya.core.resources.ResourceManager
+import ru.popov.bodya.presentation.common.translatedNameId
 
 
 /**
  *  @author popovbodya
  */
-class StatisticsInteractor(private val currenciesRepository: CurrenciesRepository) {
+class StatisticsInteractor(private val currenciesRepository: CurrenciesRepository,
+                           private val resourceManager: ResourceManager) {
 
     fun createPieDataSetBasedOnTransactionCategoriesSingle(transactionList: List<Transaction>): Single<PieData> =
             Single.fromCallable { createPieDataSetBasedOnTransactionCategories(transactionList) }
@@ -28,7 +32,7 @@ class StatisticsInteractor(private val currenciesRepository: CurrenciesRepositor
         categoriesMap.entries.forEach { (category, amount) ->
             entriesList.add(PieEntry(amount.toFloat(), category))
         }
-        val pieDataSet = PieDataSet(entriesList, "Categories")
+        val pieDataSet = PieDataSet(entriesList, resourceManager.getString(R.string.statistics))
         pieDataSet.valueTextSize = 12F
         pieDataSet.valueTextColor = rgb("#FFFFFF")
         pieDataSet.setColors(*ColorTemplate.MATERIAL_COLORS)
@@ -39,8 +43,8 @@ class StatisticsInteractor(private val currenciesRepository: CurrenciesRepositor
         val transactionCategoriesMap = mutableMapOf<String, Double>()
         for (transaction in transactionList) {
             val name = when (transaction.category) {
-                is TransactionsCategory.ExpenseTransactionsCategory -> transaction.category.expenseCategory.name
-                is TransactionsCategory.IncomeTransactionsCategory -> transaction.category.incomeCategory.name
+                is TransactionsCategory.ExpenseTransactionsCategory -> resourceManager.getString(transaction.category.translatedNameId())
+                is TransactionsCategory.IncomeTransactionsCategory -> resourceManager.getString(transaction.category.translatedNameId())
             }
             val currentAmount = transactionCategoriesMap[name]
             if (currentAmount == null) {

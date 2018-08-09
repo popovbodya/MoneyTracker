@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.statistics_fragment_layout.*
 import ru.popov.bodya.core.mvwhatever.AppFragment
 import ru.popov.bodya.domain.transactions.models.Transaction
 import ru.popov.bodya.domain.transactions.models.WalletType
+import ru.popov.bodya.presentation.common.translatedNameId
 import ru.popov.bodya.presentation.statistics.MonthPagerAdapter.Companion.INITIAL_VALUE
 import ru.popov.bodya.presentation.statistics.model.StatisticsInitialData
 import ru.popov.bodya.presentation.transactions.TransactionsRecyclerAdapter
@@ -112,11 +113,7 @@ class StatisticsFragment : AppFragment() {
         setHasOptionsMenu(true)
         val activity = activity as AppCompatActivity
         val toolbar = parentView.findViewById<Toolbar>(R.id.toolbar)
-        val walletName = when (currentWallet) {
-            WalletType.CASH -> getString(R.string.cash)
-            WalletType.BANK_ACCOUNT -> getString(R.string.bank_account)
-            WalletType.CREDIT_CARD -> getString(R.string.credit_card)
-        }
+        val walletName = getString(currentWallet.translatedNameId())
         toolbar.title = when (isIncome) {
             true -> String.format(Locale.ENGLISH, getString(R.string.statistic_income_title), walletName)
             false -> String.format(Locale.ENGLISH, getString(R.string.statistic_expense_title), walletName)
@@ -129,6 +126,7 @@ class StatisticsFragment : AppFragment() {
         transactionsAdapter = TransactionsRecyclerAdapter()
         transactions_recycler_view.adapter = transactionsAdapter
         transactions_recycler_view.layoutManager = LinearLayoutManager(context)
+        transactions_recycler_view.isNestedScrollingEnabled = false
 
         pagerAdapter = MonthPagerAdapter(childFragmentManager, currentWallet)
         month_view_pager.adapter = pagerAdapter
@@ -156,7 +154,6 @@ class StatisticsFragment : AppFragment() {
 
         viewModel.pieDataSetLiveData.observe(this, Observer { pieData ->
             pieData?.let {
-
                 val description = Description()
                 description.text = toolbar.title.toString()
                 chart.data = pieData
