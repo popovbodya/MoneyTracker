@@ -10,7 +10,7 @@ android {
     compileSdkVersion COMPLIE_SDK_VERSION
 
     defaultConfig {
-        applicationId "com.lounah.moneytracker"
+        applicationId "ru.popov.bodya"
         minSdkVersion MIN_SDK_VERSION
         targetSdkVersion TARGET_SDK_VERSION
         versionCode VERSION_CODE

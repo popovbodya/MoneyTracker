@@ -5,7 +5,7 @@ import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
-import ru.popov.bodya.app.MoneyTrackerApplication
+import ru.popov.bodya.app.HowMoneyApplication
 import ru.popov.bodya.core.dagger.ApplicationContext
 import ru.popov.bodya.di.common.modules.*
 import javax.inject.Singleton
@@ -33,5 +33,5 @@ interface AppComponent {
         fun build(): AppComponent
     }
 
-    fun inject(moneyTrackerApplication: MoneyTrackerApplication)
+    fun inject(howMoneyApplication: HowMoneyApplication)
 }

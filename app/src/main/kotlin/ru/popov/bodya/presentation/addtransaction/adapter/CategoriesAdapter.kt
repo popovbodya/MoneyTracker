@@ -1,19 +1,17 @@
-package com.lounah.moneytracker.ui.wallet.addtransaction
+package ru.popov.bodya.presentation.addtransaction.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import ru.popov.bodya.domain.transactions.models.ExpenseCategory
-import com.lounah.moneytracker.util.ResourcesSelector
-import com.lounah.wallettracker.R
 import kotlinx.android.synthetic.main.item_transaction_category.view.*
+import ru.popov.bodya.R
 import ru.popov.bodya.domain.transactions.models.TransactionsCategory
 import ru.popov.bodya.presentation.addtransaction.AddTransactionFragment
+import ru.popov.bodya.util.ResourcesSelector
 
 
-class CategoriesRVAdapter(private val callback: AddTransactionFragment.OnItemSelectedCallback)
-    : RecyclerView.Adapter<CategoriesRVAdapter.CategoriesViewHolder>() {
+class CategoriesAdapter(private val callback: AddTransactionFragment.OnItemSelectedCallback) : RecyclerView.Adapter<CategoriesAdapter.CategoriesViewHolder>() {
 
     private val categories = mutableListOf<TransactionsCategory>()
     private var selectedIndex = 0
@@ -41,7 +39,7 @@ class CategoriesRVAdapter(private val callback: AddTransactionFragment.OnItemSel
         fun bind(item: TransactionsCategory, position: Int) = with(itemView) {
 
             val iconImageResource = ResourcesSelector.fromTransactionCategoryToDrawable(item)
-            category_text_view.text = itemView.resources.getString( ResourcesSelector.fromTransactionCategoryToString(item))
+            category_text_view.text = itemView.resources.getString(ResourcesSelector.fromTransactionCategoryToString(item))
             category_image_view.setImageResource(iconImageResource)
 
             if (position == selectedIndex)

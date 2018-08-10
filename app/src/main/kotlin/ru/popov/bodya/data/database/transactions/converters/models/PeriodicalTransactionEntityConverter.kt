@@ -11,10 +11,9 @@ import ru.popov.bodya.domain.transactions.models.PeriodicalTransaction
 class PeriodicalTransactionEntityConverter : Converter<PeriodicalTransaction, PeriodicalTransactionEntity> {
     override fun reverse(to: PeriodicalTransactionEntity): PeriodicalTransaction  {
         Log.e("bodya", "reverse")
-        return PeriodicalTransaction(to.id, to.wallet, to.currency, to.category, to.amount, to.timeUpdated, to.description, to.period)
+        return PeriodicalTransaction(to.id, to.wallet, to.currency, to.category, to.amount, to.timeUpdated, to.description, to.period, to.periodDescription)
     }
 
-
     override fun convert(from: PeriodicalTransaction): PeriodicalTransactionEntity =
-            PeriodicalTransactionEntity(from.id, from.wallet, from.currency, from.category, from.amount, from.timeCreated, from.description, from.period)
+            PeriodicalTransactionEntity(from.id, from.wallet, from.currency, from.category, from.amount, from.timeCreated, from.description, from.period, from.periodDescription)
 }

@@ -1,19 +1,17 @@
 package ru.popov.bodya.domain.statistics
 
-import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.utils.ColorTemplate.rgb
+import io.reactivex.Single
+import ru.popov.bodya.R
+import ru.popov.bodya.core.resources.ResourceManager
 import ru.popov.bodya.data.repositories.CurrenciesRepository
 import ru.popov.bodya.domain.currency.model.Currency
 import ru.popov.bodya.domain.transactions.models.Transaction
 import ru.popov.bodya.domain.transactions.models.TransactionsCategory
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
-import android.R.attr.entries
-import com.github.mikephil.charting.utils.ColorTemplate
-import com.github.mikephil.charting.utils.ColorTemplate.rgb
-import com.lounah.wallettracker.R
-import io.reactivex.Single
-import ru.popov.bodya.core.resources.ResourceManager
 import ru.popov.bodya.presentation.common.translatedNameId
 
 

@@ -18,6 +18,7 @@ data class PeriodicalTransactionEntity(@PrimaryKey(autoGenerate = true)
                                        val amount: Double,
                                        val timeUpdated: Long,
                                        val description: String,
-                                       val period: Long)
+                                       val period: Long,
+                                       val periodDescription: String)
 
 

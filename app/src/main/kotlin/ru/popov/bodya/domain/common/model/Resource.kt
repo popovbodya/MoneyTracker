@@ -1,4 +1,4 @@
-package com.lounah.moneytracker.data.entities
+package ru.popov.bodya.domain.common.model
 
 data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
     companion object {

@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import ru.popov.bodya.di.common.viewmodel.AppViewModelFactory
 import ru.popov.bodya.di.common.viewmodel.ViewModelKey
+import ru.popov.bodya.presentation.about.AboutViewModel
 import ru.popov.bodya.presentation.account.AccountViewModel
 import ru.popov.bodya.presentation.addtransaction.AddTransactionViewModel
 import ru.popov.bodya.presentation.init.InitViewModel
@@ -37,4 +38,9 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(StatisticsViewModel::class)
     fun bindStatisticsViewModel(statisticsViewModel: StatisticsViewModel): StatisticsViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AboutViewModel::class)
+    fun bindAboutViewModel(aboutViewModel: AboutViewModel): AboutViewModel
 }

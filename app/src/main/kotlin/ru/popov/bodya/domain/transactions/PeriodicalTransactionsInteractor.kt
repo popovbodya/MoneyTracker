@@ -22,8 +22,8 @@ class PeriodicalTransactionsInteractor(private val periodicalTransactionsReposit
         return periodicalTransactionsRepository.getAllPeriodicalTransactionsByWallet(walletType)
     }
 
-    fun createTransaction(selectedWallet: WalletType, selectedCategory: TransactionsCategory, selectedCurrency: Currency, amount: Double, time: Long, comment: String, period: Long): Completable {
-        return periodicalTransactionsRepository.addPeriodicalTransaction(PeriodicalTransaction(DEFAULT_ID, selectedWallet, selectedCurrency, selectedCategory, amount, time, comment, period))
+    fun createTransaction(selectedWallet: WalletType, selectedCategory: TransactionsCategory, selectedCurrency: Currency, amount: Double, time: Long, comment: String, period: Long, periodDescription: String): Completable {
+        return periodicalTransactionsRepository.addPeriodicalTransaction(PeriodicalTransaction(DEFAULT_ID, selectedWallet, selectedCurrency, selectedCategory, amount, time, comment, period, periodDescription))
     }
 
     fun createTransactionListBasedOnPeriodicalTransactions(periodicalTransactionList: List<PeriodicalTransaction>, currentTimeInMillis: Long): List<Transaction> {
@@ -35,7 +35,7 @@ class PeriodicalTransactionsInteractor(private val periodicalTransactionsReposit
                 transactionList.add(Transaction(TransactionsInteractor.DEFAULT_ID, it.wallet, it.currency, it.category, it.amount, transactionTime, it.description))
                 transactionTime += it.period
             }
-            periodicalTransactionsRepository.modifyPeriodicalTransactionTimeUpdated(it.id, transactionTime)
+            periodicalTransactionsRepository.modifyPeriodicalTransactionTimeUpdated(it.id, it.wallet, transactionTime)
         }
         return transactionList
     }

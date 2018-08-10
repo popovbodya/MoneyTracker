@@ -3,16 +3,16 @@ package ru.popov.bodya.app
 import android.app.Activity
 import android.app.Application
 import com.facebook.stetho.Stetho
-import com.lounah.wallettracker.BuildConfig
 import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
+import ru.popov.bodya.BuildConfig
 import ru.popov.bodya.di.common.app.AppInjector
 import timber.log.Timber
 import javax.inject.Inject
 
-class MoneyTrackerApplication : Application(), HasActivityInjector {
+class HowMoneyApplication : Application(), HasActivityInjector {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>

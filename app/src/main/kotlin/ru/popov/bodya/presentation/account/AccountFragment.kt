@@ -11,11 +11,11 @@ import android.support.v7.widget.Toolbar
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import android.widget.Toast
-import com.lounah.moneytracker.data.entities.Status
-import com.lounah.wallettracker.R
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_wallet.*
+import ru.popov.bodya.R
 import ru.popov.bodya.core.mvwhatever.AppFragment
+import ru.popov.bodya.domain.common.model.Status
 import ru.popov.bodya.domain.currency.model.Currency
 import ru.popov.bodya.domain.currency.model.CurrencyAmount
 import ru.popov.bodya.domain.transactions.models.Transaction
@@ -94,6 +94,14 @@ class AccountFragment : AppFragment(), OnTransactionDeletedListener {
             R.id.bankWallet -> {
                 viewModel.onWalletChanged(WalletType.BANK_ACCOUNT)
                 changeToolbarTitle(getString(R.string.bank_account))
+                return true
+            }
+            R.id.periodical_transactions -> {
+                viewModel.onPeriodicalTransactionsMenuItemClicked()
+                return true
+            }
+            R.id.about -> {
+                viewModel.onAboutMenuItemClicked()
                 return true
             }
             else -> super.onOptionsItemSelected(item)

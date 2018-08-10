@@ -11,27 +11,25 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import android.widget.Toast
-import com.lounah.moneytracker.ui.wallet.addtransaction.AddTransactionView
-import com.lounah.moneytracker.ui.wallet.addtransaction.CategoriesRVAdapter
-import com.lounah.wallettracker.R
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_add_transaction.*
+import ru.popov.bodya.R
 import ru.popov.bodya.core.mvwhatever.AppFragment
 import ru.popov.bodya.domain.currency.model.Currency
 import ru.popov.bodya.domain.transactions.models.TransactionsCategory
 import ru.popov.bodya.domain.transactions.models.WalletType
+import ru.popov.bodya.presentation.addtransaction.adapter.CategoriesAdapter
 import timber.log.Timber
 import javax.inject.Inject
 
-class AddTransactionFragment : AppFragment(), AddTransactionView {
+class AddTransactionFragment : AppFragment() {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     @Inject
     lateinit var viewModel: AddTransactionViewModel
 
-    private lateinit var categoriesAdapter: CategoriesRVAdapter
+    private lateinit var categoriesAdapter: CategoriesAdapter
     private lateinit var selectedWallet: WalletType
     private lateinit var selectedCurrency: Currency
     private lateinit var selectedCategory: TransactionsCategory
@@ -93,10 +91,6 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
         }
     }
 
-    override fun onTransactionCreated() {
-        Toast.makeText(activity, "onTransactionCreated", Toast.LENGTH_LONG).show()
-    }
-
     private fun subscribeToViewModel() {
         viewModel.transactionCategoriesLiveData.observe(this, Observer { categoriesList ->
             categoriesList?.apply {
@@ -125,7 +119,7 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
     }
 
     private fun initCategoriesList() {
-        categoriesAdapter = CategoriesRVAdapter(object : OnItemSelectedCallback {
+        categoriesAdapter = CategoriesAdapter(object : OnItemSelectedCallback {
             override fun onCategorySelected(type: TransactionsCategory) {
                 selectedCategory = type
                 Timber.d("selectedCategory= $selectedCategory")
@@ -174,7 +168,7 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
             val comment = comment_edit_text.text.toString()
             transaction_sum_edit_text.clearFocus()
             comment_edit_text.clearFocus()
-            viewModel.onAddTransactionButtonClick(selectedWallet, selectedCategory, selectedCurrency, amount, comment)
+            viewModel.onAddTransactionButtonClick(selectedWallet, selectedCategory, selectedCurrency, amount, comment, periodic_transaction_text_view.text.toString())
         }
     }
 

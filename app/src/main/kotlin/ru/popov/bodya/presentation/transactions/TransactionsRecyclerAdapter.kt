@@ -3,7 +3,7 @@ package ru.popov.bodya.presentation.transactions
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.lounah.wallettracker.R
+import ru.popov.bodya.R
 import ru.popov.bodya.domain.transactions.models.Transaction
 
 class TransactionsRecyclerAdapter(private val onTransactionDeletedListener: OnTransactionDeletedListener) : RecyclerView.Adapter<TransactionViewHolder>() {

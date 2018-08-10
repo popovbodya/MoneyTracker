@@ -1,12 +1,7 @@
 <resources>
-    <string name="app_name">WalletTracker</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="app_name">How Money</string>
 
-    <string name="action_settings">Settings</string>
+
 
     <string name="balance">Баланс</string>
     <string name="food">Еда</string>
@@ -40,6 +35,8 @@
     <string name="wallet">Кошелек</string>
     <string name="settings">Настройки</string>
     <string name="log_out">Выйти</string>
+
+    <string name="periodic_transactions_title">Периодические транзакции</string>
     <string name="periodic_transaction_no_repetition">Без повторений</string>
     <string name="periodic_transaction_1_hour">Повторение каждый час</string>
     <string name="periodic_transaction_12_hour">Повторение каждые полдня</string>
@@ -66,11 +63,11 @@
     <string name="major_currency">Основная валюта</string>
 
     <string name="version_code">Версия приложения: %1$s</string>
-    <string name="copyright">© 2018 #Lounah</string>
+    <string name="author">Автор: Попов Богдан</string>
 
     <string name="buy_rate">Покупка</string>
     <string name="sell_rate">Продажа</string>
-    <string name="cash">Основной кошелек</string>
+    <string name="cash">Наличные</string>
     <string name="statistics">Статистика</string>
     <string name="new_income">Новый доход</string>
     <string name="new_expense">Новый расход</string>

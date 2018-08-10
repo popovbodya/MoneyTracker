@@ -55,7 +55,7 @@
     <string name="other_settings">Other settings</string>
     <string name="major_currency">Major currency</string>
     <string name="version_code">Version code: %1$s</string>
-    <string name="copyright">© 2018 #Lounah</string>
+    <string name="author">Author: Popov Bogdan</string>
     <string name="cash">Cash</string>
     <string name="graphics">Graphics</string>
     <string name="rub">RUB</string>

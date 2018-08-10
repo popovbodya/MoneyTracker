@@ -1,4 +1,4 @@
-package ru.popov.bodya.presentation.statistics
+package ru.popov.bodya.presentation.statistics.month
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

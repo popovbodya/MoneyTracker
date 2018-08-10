@@ -12,4 +12,5 @@ data class PeriodicalTransaction(val id: Long,
                                  val amount: Double,
                                  val timeCreated: Long,
                                  val description: String,
-                                 val period: Long)
+                                 val period: Long,
+                                 val periodDescription: String)

@@ -15,7 +15,10 @@ interface PeriodicalTransactionsDao : BaseDao<PeriodicalTransactionEntity> {
     @Query("SELECT * FROM periodicalTransactions WHERE wallet=:wallet")
     fun getAllTransactionsByWallet(wallet: WalletType): List<PeriodicalTransactionEntity>
 
-    @Query("UPDATE periodicalTransactions SET timeUpdated = :timeUpdated where id = :transactionId")
-    fun updatePeriodicalTransactionTimeUpdated(transactionId: Long, timeUpdated: Long)
+    @Query("UPDATE periodicalTransactions SET timeUpdated = :timeUpdated where id = :transactionId AND wallet=:wallet")
+    fun updatePeriodicalTransactionTimeUpdated(transactionId: Long, wallet: WalletType, timeUpdated: Long)
+
+    @Query("DELETE FROm periodicalTransactions WHERE id=:transactionId AND wallet=:wallet")
+    fun deletePeriodicalTransaction(wallet: WalletType, transactionId: Long)
 
 }

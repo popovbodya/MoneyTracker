@@ -1,15 +1,15 @@
 package ru.popov.bodya.presentation.account
 
 import android.arch.lifecycle.MutableLiveData
-import com.lounah.moneytracker.data.entities.Resource
-import com.lounah.wallettracker.R
 import io.reactivex.SingleTransformer
 import io.reactivex.functions.BiFunction
+import ru.popov.bodya.R
 import ru.popov.bodya.core.extensions.connect
 import ru.popov.bodya.core.mvwhatever.AppViewModel
 import ru.popov.bodya.core.rx.RxSchedulers
 import ru.popov.bodya.core.rx.RxSchedulersTransformer
 import ru.popov.bodya.domain.calendar.CalendarInteractor
+import ru.popov.bodya.domain.common.model.Resource
 import ru.popov.bodya.domain.currency.CurrencyInteractor
 import ru.popov.bodya.domain.currency.model.Currency
 import ru.popov.bodya.domain.currency.model.CurrencyAmount
@@ -18,6 +18,7 @@ import ru.popov.bodya.domain.transactions.PeriodicalTransactionsInteractor
 import ru.popov.bodya.domain.transactions.TransactionsInteractor
 import ru.popov.bodya.domain.transactions.models.Transaction
 import ru.popov.bodya.domain.transactions.models.WalletType
+import ru.popov.bodya.presentation.common.Screens
 import ru.popov.bodya.presentation.common.Screens.STATISTICS_SCREEN
 import ru.popov.bodya.presentation.statistics.model.StatisticsInitialData
 import ru.terrakok.cicerone.Router
@@ -80,6 +81,15 @@ class AccountViewModel @Inject constructor(
         currentWallet = walletType
         fetchAccountData()
     }
+
+    fun onPeriodicalTransactionsMenuItemClicked() {
+        router.navigateTo(Screens.PERIODICAL_TRANSACTIONS_SCREEN, currentWallet)
+    }
+
+    fun onAboutMenuItemClicked() {
+        router.navigateTo(Screens.ABOUT_SCREEN)
+    }
+
 
     fun onTransactionDeleted(transaction: Transaction) {
         val currentTime = Calendar.getInstance().timeInMillis

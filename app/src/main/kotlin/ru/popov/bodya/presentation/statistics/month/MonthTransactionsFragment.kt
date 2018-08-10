@@ -1,24 +1,24 @@
-package ru.popov.bodya.presentation.statistics
+package ru.popov.bodya.presentation.statistics.month
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.lounah.wallettracker.R
 import kotlinx.android.synthetic.main.current_month_layout.*
+import ru.popov.bodya.R
+import ru.popov.bodya.core.mvwhatever.AppFragment
+import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
-import android.os.Build
-import java.text.DateFormatSymbols
 
 
 /**
  *  @author popovbodya
  */
-class MonthTransactionsFragment : Fragment() {
+class MonthTransactionsFragment : AppFragment() {
 
     companion object {
 

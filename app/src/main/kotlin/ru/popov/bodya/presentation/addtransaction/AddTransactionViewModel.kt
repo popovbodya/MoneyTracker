@@ -2,6 +2,7 @@ package ru.popov.bodya.presentation.addtransaction
 
 import android.arch.lifecycle.MutableLiveData
 import ru.popov.bodya.core.mvwhatever.AppViewModel
+import ru.popov.bodya.core.resources.ResourceManager
 import ru.popov.bodya.core.rx.RxSchedulersTransformer
 import ru.popov.bodya.domain.currency.model.Currency
 import ru.popov.bodya.domain.transactions.PeriodicalTransactionsInteractor
@@ -21,6 +22,7 @@ import javax.inject.Inject
  */
 class AddTransactionViewModel @Inject constructor(private val transactionsInteractor: TransactionsInteractor,
                                                   private val periodicalTransactionsInteractor: PeriodicalTransactionsInteractor,
+                                                  private val resourceManager: ResourceManager,
                                                   private val rxSchedulersTransformer: RxSchedulersTransformer,
                                                   private val router: Router) : AppViewModel() {
 
@@ -56,7 +58,7 @@ class AddTransactionViewModel @Inject constructor(private val transactionsIntera
         }
     }
 
-    fun onAddTransactionButtonClick(selectedWallet: WalletType, selectedCategory: TransactionsCategory, selectedCurrency: Currency, amount: Double, comment: String) {
+    fun onAddTransactionButtonClick(selectedWallet: WalletType, selectedCategory: TransactionsCategory, selectedCurrency: Currency, amount: Double, comment: String, periodDescription: String) {
         val currentTime = Calendar.getInstance().timeInMillis
 
         when (currentPeriod) {
@@ -67,7 +69,7 @@ class AddTransactionViewModel @Inject constructor(private val transactionsIntera
                             { router.showSystemMessage("Transaction create failed") }
                     )
 
-            else -> periodicalTransactionsInteractor.createTransaction(selectedWallet, selectedCategory, selectedCurrency, amount, currentTime, comment, currentPeriod)
+            else -> periodicalTransactionsInteractor.createTransaction(selectedWallet, selectedCategory, selectedCurrency, amount, currentTime, comment, currentPeriod, periodDescription)
                     .andThen(transactionsInteractor.addTransaction(selectedWallet, selectedCategory, selectedCurrency, amount, currentTime, comment))
                     .compose(rxSchedulersTransformer.ioToMainTransformerCompletable())
                     .subscribe(

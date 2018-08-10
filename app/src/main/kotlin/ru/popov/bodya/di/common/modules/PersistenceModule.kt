@@ -3,10 +3,8 @@ package ru.popov.bodya.di.common.modules
 import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
-import android.content.RestrictionsManager
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.lounah.moneytracker.data.entities.Resource
 import dagger.Module
 import dagger.Provides
 import ru.popov.bodya.core.dagger.ApplicationContext

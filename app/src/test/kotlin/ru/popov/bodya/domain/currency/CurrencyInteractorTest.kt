@@ -31,22 +31,22 @@ class CurrencyInteractorTest {
     @Test
     fun testGetExchangeRate() {
         val expected = createRates()
-        `when`(currenciesRepository.getExchangeRate()).thenReturn(Single.just(expected))
+        `when`(currenciesRepository.getExchangeRateSingle()).thenReturn(Single.just(expected))
         currencyInteractor.getExchangeRate()
                 .test()
                 .assertValue(expected)
-        verify(currenciesRepository).getExchangeRate()
+        verify(currenciesRepository).getExchangeRateSingle()
         verifyNoMoreInteractions(currenciesRepository)
     }
 
     @Test
     fun testGetCachedExchangeRate() {
         val expected = createRates()
-        `when`(currenciesRepository.getCachedExchangeRate()).thenReturn(Single.just(expected))
+        `when`(currenciesRepository.getCachedExchangeRateSingle()).thenReturn(Single.just(expected))
         currencyInteractor.getCachedExchangeRate()
                 .test()
                 .assertValue(expected)
-        verify(currenciesRepository).getCachedExchangeRate()
+        verify(currenciesRepository).getCachedExchangeRateSingle()
         verifyNoMoreInteractions(currenciesRepository)
     }
 

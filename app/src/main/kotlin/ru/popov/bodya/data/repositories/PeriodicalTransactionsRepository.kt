@@ -22,8 +22,11 @@ class PeriodicalTransactionsRepository(private val periodicalTransactionsDao: Pe
     fun addPeriodicalTransaction(periodicalTransaction: PeriodicalTransaction): Completable =
             Completable.fromAction { periodicalTransactionsDao.insert(periodicalTransactionEntityConverter.convert(periodicalTransaction)) }
 
-    fun modifyPeriodicalTransactionTimeUpdated(transactionId: Long, timeUpdated: Long) {
-        periodicalTransactionsDao.updatePeriodicalTransactionTimeUpdated(transactionId, timeUpdated)
+    fun modifyPeriodicalTransactionTimeUpdated(transactionId: Long, walletType: WalletType, timeUpdated: Long) {
+        periodicalTransactionsDao.updatePeriodicalTransactionTimeUpdated(transactionId, walletType, timeUpdated)
     }
 
+    fun deletePeriodicalTransaction(walletType: WalletType, periodicalTransaction: PeriodicalTransaction): Completable {
+        return Completable.fromAction { periodicalTransactionsDao.deletePeriodicalTransaction(walletType, periodicalTransaction.id) }
+    }
 }

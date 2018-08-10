@@ -1,6 +1,6 @@
-package com.lounah.moneytracker.util
+package ru.popov.bodya.util
 
-import com.lounah.wallettracker.R
+import ru.popov.bodya.R
 import ru.popov.bodya.domain.transactions.models.ExpenseCategory
 import ru.popov.bodya.domain.transactions.models.IncomeCategory
 import ru.popov.bodya.domain.transactions.models.TransactionsCategory

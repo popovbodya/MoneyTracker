@@ -1,15 +1,13 @@
 package ru.popov.bodya.data.network.api
 
-import com.lounah.wallettracker.BuildConfig
 import io.reactivex.Single
+import ru.popov.bodya.BuildConfig
 import ru.popov.bodya.data.network.beans.ExchangeRatesBean
 
 /**
  * @author popovbodya
  */
 class ExchangeRateApiWrapper(private val currenciesRateApi: CurrenciesRateApi) {
-
-    // https://data.fixer.io/api/latest?access_key=15c6f7ea0be4d376a95b5ada56412e8c&base=RUB&symbols=USD,EUR
 
     companion object {
         const val API_KEY = "access_key"

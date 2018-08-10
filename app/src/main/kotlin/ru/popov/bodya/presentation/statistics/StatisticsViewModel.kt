@@ -2,13 +2,13 @@ package ru.popov.bodya.presentation.statistics
 
 import android.arch.lifecycle.MutableLiveData
 import com.github.mikephil.charting.data.PieData
-import com.lounah.moneytracker.data.entities.Resource
 import io.reactivex.Single
 import io.reactivex.functions.Consumer
 import ru.popov.bodya.core.mvwhatever.AppViewModel
 import ru.popov.bodya.core.rx.RxSchedulers
 import ru.popov.bodya.core.rx.RxSchedulersTransformer
 import ru.popov.bodya.domain.calendar.CalendarInteractor
+import ru.popov.bodya.domain.common.model.Resource
 import ru.popov.bodya.domain.statistics.StatisticsInteractor
 import ru.popov.bodya.domain.transactions.models.Transaction
 import ru.popov.bodya.domain.transactions.models.WalletType

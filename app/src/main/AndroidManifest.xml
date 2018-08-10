@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lounah.wallettracker">
+    package="ru.popov.bodya">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="ru.popov.bodya.app.MoneyTrackerApplication"
+        android:name="ru.popov.bodya.app.HowMoneyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/app_icon"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/app_logo"
+        android:roundIcon="@drawable/app_icon"
         android:supportsRtl="true"
         android:theme="@style/MoneyTrackerTheme">
         <activity android:name="ru.popov.bodya.presentation.account.AccountActivity" />
