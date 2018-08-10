@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            app:title="@string/create_transaction" />
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="?android:attr/actionBarSize">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/app_margin_8dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/transaction_sum_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/transaction_amount"
+                    android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/app_margin_8dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/comment_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/transaction_commentary"
+                    android:inputType="textShortMessage"
+                    android:singleLine="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                style="@style/TextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/transaction_currency" />
+
+            <info.hoang8f.android.segmented.SegmentedGroup
+                android:id="@+id/rg_currencies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/app_margin_8dp"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                app:sc_border_width="1dp"
+                app:sc_checked_text_color="@color/white"
+                app:sc_corner_radius="@dimen/add_transaction_oprtion_card_view"
+                app:sc_tint_color="@color/black">
+
+                <RadioButton
+                    android:id="@+id/rub_radio_button"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/rub" />
+
+                <RadioButton
+                    android:id="@+id/euro_radio_button"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/eur" />
+
+                <RadioButton
+                    android:id="@+id/usd_radio_button"
+                    style="@style/RadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/usd" />
+            </info.hoang8f.android.segmented.SegmentedGroup>
+
+
+            <TextView
+                style="@style/TextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/transaction_wallet" />
+
+
+            <info.hoang8f.android.segmented.SegmentedGroup
+                android:id="@+id/wallets_segmented_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/app_margin_8dp"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                app:sc_border_width="1dp"
+                app:sc_checked_text_color="@color/white"
+                app:sc_corner_radius="@dimen/add_transaction_oprtion_card_view"
+                app:sc_tint_color="@color/black">
+
+                <RadioButton
+                    android:id="@+id/cash_radio_button"
+                    style="@style/RadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/app_padding_4dp"
+                    android:text="@string/cash"
+                    android:textAllCaps="true" />
+
+                <RadioButton
+                    android:id="@+id/credit_radio_button"
+                    style="@style/RadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/app_padding_4dp"
+                    android:text="@string/credit_card"
+                    android:textAllCaps="true" />
+
+                <RadioButton
+                    android:id="@+id/bank_account_radio_button"
+                    style="@style/RadioButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/app_padding_4dp"
+                    android:text="@string/bank_account"
+                    android:textAllCaps="true" />
+            </info.hoang8f.android.segmented.SegmentedGroup>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/periodic_transaction_text_view"
+                style="@style/TextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/periodic_transaction_no_repetition" />
+
+            <SeekBar
+                android:id="@+id/seekbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="6"
+                android:padding="16dp" />
+
+            <TextView
+                android:id="@+id/transaction_category_text_view"
+                style="@style/TextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/transaction_category" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/categories_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/app_margin_8dp"
+                android:orientation="horizontal"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray" />
+
+            <Button
+                android:id="@+id/create_transaction_button"
+                style="@android:style/Widget.Material.Button.Borderless.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/app_margin_16dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/create" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>
+
+

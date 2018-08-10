@@ -2,48 +2,44 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_wallet_cl"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/information_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/information_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
+                    android:layout_height="?android:attr/actionBarSize"
                     app:title="@string/wallet" />
 
                 <info.hoang8f.android.segmented.SegmentedGroup
                     android:id="@+id/rg_currencies"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/toolbar"
-                    android:layout_margin="16dp"
+                    android:layout_margin="@dimen/app_margin_16dp"
                     android:orientation="horizontal"
                     android:weightSum="3"
+                    app:layout_constraintTop_toBottomOf="@id/toolbar"
                     app:sc_border_width="2dp"
                     app:sc_checked_text_color="@color/white"
                     app:sc_corner_radius="4dp"
                     app:sc_tint_color="@color/black">
 
                     <RadioButton
-                        android:id="@+id/btn_rub"
+                        android:id="@+id/rub_radio_button"
                         style="@style/RadioButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -51,7 +47,7 @@
                         android:text="@string/rub" />
 
                     <RadioButton
-                        android:id="@+id/btn_eur"
+                        android:id="@+id/euro_radio_button"
                         style="@style/RadioButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -59,7 +55,7 @@
                         android:text="@string/eur" />
 
                     <RadioButton
-                        android:id="@+id/btn_usd"
+                        android:id="@+id/usd_radio_button"
                         style="@style/RadioButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -68,212 +64,195 @@
 
                 </info.hoang8f.android.segmented.SegmentedGroup>
 
+
                 <org.fabiomsr.moneytextview.MoneyTextView
                     android:id="@+id/tv_balance"
                     style="@style/TextStyle.Large"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/rg_currencies"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="2dp"
-                    app:baseTextSize="69sp"
+                    app:baseTextSize="62sp"
                     app:decimalDigitsTextSize="21sp"
                     app:decimalGravity="top"
-                    app:decimalMargin="8dp"
+                    app:decimalMargin="@dimen/app_margin_8dp"
                     app:decimalSeparator="."
                     app:includeDecimalSeparator="true"
+                    app:layout_constraintTop_toBottomOf="@id/rg_currencies"
                     app:symbolGravity="start"
-                    app:symbolMargin="8dp"
+                    app:symbolMargin="@dimen/app_margin_8dp"
                     app:symbolTextSize="13sp"
                     tools:amount="11143.55" />
 
-                <LinearLayout
-                    android:id="@+id/ll_cards"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_balance"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
 
-                    <android.support.v7.widget.CardView
-                        android:id="@+id/cv_currencies"
-                        android:layout_width="wrap_content"
-                        android:layout_height="128dp"
-                        android:layout_marginBottom="16dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_weight="1"
-                        app:cardCornerRadius="6dp"
-                        app:cardElevation="8dp">
+                <android.support.v7.widget.CardView
+                    android:id="@+id/cv_currencies"
+                    android:layout_width="@dimen/rates_card_view_width"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="@dimen/app_margin_8dp"
+                    android:layout_marginStart="@dimen/app_margin_16dp"
+                    android:layout_marginTop="@dimen/app_margin_8dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="@dimen/app_card_cardview_corner_radius"
+                    app:cardElevation="@dimen/cardview_default_elevation"
+                    app:layout_constraintBottom_toBottomOf="@+id/expenses_card_view"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/incomes_card_view">
 
-                        <TextView
-                            android:id="@+id/tv_currency_sign_top"
-                            style="@style/TextStyle.Large"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="top|left"
-                            android:layout_margin="16dp"
-                            android:text="@string/dollar_sign" />
-
-                        <TextView
-                            android:id="@+id/tv_currency_sign_bottom"
-                            style="@style/TextStyle.Large"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|bottom"
-                            android:layout_margin="16dp"
-                            android:text="@string/euro_sign" />
-
-                        <TextView
-                            android:id="@+id/currency_top_exchange_rate"
-                            style="@style/TextStyle.Large"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end|top"
-                            android:layout_margin="16dp"
-                            android:text="@string/dash" />
-
-                        <TextView
-                            android:id="@+id/currency_bottom_exchange_rate"
-                            style="@style/TextStyle.Large"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end|bottom"
-                            android:layout_margin="16dp"
-                            android:text="@string/dash" />
-
-                        <ProgressBar
-                            android:id="@+id/progressBar"
-                            style="?android:attr/progressBarStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:visibility="gone" />
-                    </android.support.v7.widget.CardView>
-
-                    <LinearLayout
+                    <TextView
+                        style="@style/TextStyle.Large"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_gravity="top|left"
+                        android:layout_margin="@dimen/app_margin_16dp"
+                        android:text="@string/dollar_sign" />
 
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/cv_credits"
-                            android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:layout_marginBottom="4dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="16dp"
-                            app:cardCornerRadius="6dp"
-                            app:cardElevation="4dp">
+                    <TextView
+                        style="@style/TextStyle.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|bottom"
+                        android:layout_margin="@dimen/app_margin_16dp"
+                        android:text="@string/euro_sign" />
 
-                            <TextView
-                                style="@style/TextStyle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="top"
-                                android:layout_marginBottom="8dp"
-                                android:text="@string/incomes"
-                                android:textAlignment="center"
-                                android:textAllCaps="true"
-                                android:textColor="@color/colorIncome" />
+                    <TextView
+                        android:id="@+id/currency_top_exchange_rate"
+                        style="@style/TextStyle.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|top"
+                        android:layout_margin="@dimen/app_margin_16dp"
+                        android:text="@string/dash" />
 
-                            <org.fabiomsr.moneytextview.MoneyTextView
-                                android:id="@+id/tv_incomes"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_margin="8dp"
-                                android:padding="8dp"
-                                android:textAlignment="center"
-                                app:amount="256643.32"
-                                app:decimalGravity="top"
-                                app:decimalSeparator="."
-                                app:gravity="bottom"
-                                app:symbol="" />
+                    <TextView
+                        android:id="@+id/currency_bottom_exchange_rate"
+                        style="@style/TextStyle.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|bottom"
+                        android:layout_margin="@dimen/app_margin_16dp"
+                        android:text="@string/dash" />
+                </android.support.v7.widget.CardView>
 
-                        </android.support.v7.widget.CardView>
 
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/cv_doubts"
-                            android:layout_width="match_parent"
-                            android:layout_height="60dp"
-                            android:layout_marginBottom="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="4dp"
-                            app:cardCornerRadius="6dp"
-                            app:cardElevation="8dp">
+                <android.support.v7.widget.CardView
+                    android:id="@+id/incomes_card_view"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/amount_card_view_height"
+                    android:layout_margin="@dimen/app_margin_16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="4dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/cv_currencies"
+                    app:layout_constraintTop_toBottomOf="@id/tv_balance">
 
-                            <TextView
-                                style="@style/TextStyle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="top"
-                                android:layout_marginBottom="8dp"
-                                android:text="@string/expenses"
-                                android:textAlignment="center"
-                                android:textAllCaps="true"
-                                android:textColor="@color/colorExpense" />
+                    <TextView
+                        style="@style/TextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:layout_marginBottom="@dimen/app_margin_8dp"
+                        android:text="@string/incomes"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorIncome" />
 
-                            <org.fabiomsr.moneytextview.MoneyTextView
-                                android:id="@+id/tv_expenses"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="bottom"
-                                android:layout_margin="8dp"
-                                android:padding="8dp"
-                                android:textAlignment="center"
-                                app:amount="253.32"
-                                app:decimalGravity="top"
-                                app:decimalSeparator="."
-                                app:gravity="bottom"
-                                app:symbol="" />
+                    <org.fabiomsr.moneytextview.MoneyTextView
+                        android:id="@+id/incomes_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/app_margin_8dp"
+                        android:padding="@dimen/app_margin_8dp"
+                        android:textAlignment="center"
+                        app:amount="256643.32"
+                        app:decimalGravity="top"
+                        app:decimalSeparator="."
+                        app:gravity="bottom"
+                        app:symbol="" />
 
-                        </android.support.v7.widget.CardView>
-                    </LinearLayout>
-                </LinearLayout>
+                </android.support.v7.widget.CardView>
 
-            </RelativeLayout>
+                <android.support.v7.widget.CardView
+                    android:id="@+id/expenses_card_view"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/amount_card_view_height"
+                    android:layout_margin="@dimen/app_margin_16dp"
+                    android:layout_marginBottom="@dimen/app_margin_8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="@dimen/app_card_cardview_corner_radius"
+                    app:cardElevation="@dimen/app_cardview_elevation"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/cv_currencies"
+                    app:layout_constraintTop_toBottomOf="@+id/incomes_card_view">
+
+                    <TextView
+                        style="@style/TextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:layout_marginBottom="@dimen/app_margin_8dp"
+                        android:text="@string/expenses"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorExpense" />
+
+                    <org.fabiomsr.moneytextview.MoneyTextView
+                        android:id="@+id/expenses_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_margin="@dimen/app_margin_8dp"
+                        android:padding="@dimen/app_margin_8dp"
+                        android:textAlignment="center"
+                        app:amount="253.32"
+                        app:decimalGravity="top"
+                        app:decimalSeparator="."
+                        app:gravity="bottom"
+                        app:symbol="" />
+                </android.support.v7.widget.CardView>
+            </android.support.constraint.ConstraintLayout>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
+            android:id="@+id/current_month_transactions_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
             android:gravity="center"
-            android:padding="16dp"
+            android:padding="@dimen/app_margin_16dp"
             android:text="@string/all_transactions"
-            android:textAppearance="@style/TextStyle.Large" />
+            android:textAppearance="@style/TextStyle"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_actions"
+            android:id="@+id/transactions_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/current_month_transactions_text_view" />
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu
         android:id="@+id/fab_add"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
+        android:layout_gravity="bottom|right"
+        android:layout_marginStart="@dimen/app_margin_16dp"
         app:fab_addButtonColorNormal="@color/colorAccent"
+        app:fab_addButtonColorPressed="@color/black"
         app:fab_addButtonSize="normal"
         app:fab_labelStyle="@style/menu_labels_style"
-        app:fab_labelsPosition="left"
-        app:layout_anchor="@id/rv_actions"
-        app:layout_anchorGravity="bottom|end|right">
+        app:fab_labelsPosition="left">
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_new_income"
@@ -281,6 +260,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             app:fab_colorNormal="@color/colorIncome"
+            app:fab_colorPressed="@color/black"
             app:fab_icon="@drawable/ic_income"
             app:fab_size="mini"
             app:fab_title="@string/new_income" />
@@ -291,6 +271,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             app:fab_colorNormal="@color/colorExpense"
+            app:fab_colorPressed="@color/black"
             app:fab_icon="@drawable/ic_expense"
             app:fab_size="mini"
             app:fab_title="@string/new_expense" />

@@ -3,25 +3,33 @@ package ru.popov.bodya.presentation.account
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.widget.Toolbar
+import android.support.v7.widget.helper.ItemTouchHelper
+import android.view.*
 import android.widget.Toast
-import com.lounah.moneytracker.data.entities.Status
-import com.lounah.wallettracker.R
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.fragment_wallet.*
+import ru.popov.bodya.R
 import ru.popov.bodya.core.mvwhatever.AppFragment
+import ru.popov.bodya.domain.common.model.Status
+import ru.popov.bodya.domain.currency.model.Currency
+import ru.popov.bodya.domain.currency.model.CurrencyAmount
 import ru.popov.bodya.domain.transactions.models.Transaction
+import ru.popov.bodya.domain.transactions.models.WalletType
 import ru.popov.bodya.presentation.common.Screens.ADD_NEW_TRANSACTION_SCREEN
-import ru.popov.bodya.presentation.transactions.TransactionsRVAdapter
+import ru.popov.bodya.presentation.common.SwipeToDeleteCallback
+import ru.popov.bodya.presentation.transactions.OnTransactionDeletedListener
+import ru.popov.bodya.presentation.transactions.TransactionsRecyclerAdapter
 import ru.terrakok.cicerone.Router
 import java.text.DecimalFormat
 import javax.inject.Inject
 
-class AccountFragment : AppFragment() {
+
+class AccountFragment : AppFragment(), OnTransactionDeletedListener {
 
     @Inject
     lateinit var router: Router
@@ -31,7 +39,7 @@ class AccountFragment : AppFragment() {
     lateinit var viewModel: AccountViewModel
 
     private val formatter = DecimalFormat("#0.00")
-    private lateinit var transactionsAdapter: TransactionsRVAdapter
+    private lateinit var transactionsAdapter: TransactionsRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
@@ -41,18 +49,19 @@ class AccountFragment : AppFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val parentView = inflater.inflate(R.layout.fragment_wallet, container, false)
         setHasOptionsMenu(true)
+        initToolbar(parentView)
         return parentView
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         initUI()
     }
 
     override fun onStart() {
         super.onStart()
         subscribeToViewModel()
-        viewModel.fetchInitialData()
+        viewModel.fetchAccountData()
     }
 
     override fun onResume() {
@@ -65,11 +74,64 @@ class AccountFragment : AppFragment() {
         removeObservers()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.account_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.cashWallet -> {
+                viewModel.onWalletChanged(WalletType.CASH)
+                changeToolbarTitle(getString(R.string.wallet))
+                return true
+            }
+            R.id.creditWallet -> {
+                viewModel.onWalletChanged(WalletType.CREDIT_CARD)
+                changeToolbarTitle(getString(R.string.credit_card))
+                return true
+            }
+            R.id.bankWallet -> {
+                viewModel.onWalletChanged(WalletType.BANK_ACCOUNT)
+                changeToolbarTitle(getString(R.string.bank_account))
+                return true
+            }
+            R.id.periodical_transactions -> {
+                viewModel.onPeriodicalTransactionsMenuItemClicked()
+                return true
+            }
+            R.id.about -> {
+                viewModel.onAboutMenuItemClicked()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onTransactionDeleted(transaction: Transaction) {
+        viewModel.onTransactionDeleted(transaction)
+    }
+
     private fun initUI() {
         initFab()
         initCurrenciesRadioGroup()
         initTransactionsList()
-        initCurrencies()
+        initCardViews()
+    }
+
+    private fun initCardViews() {
+        incomes_card_view.setOnClickListener { viewModel.onIncomeBalanceClick() }
+        expenses_card_view.setOnClickListener { viewModel.onExpenseBalanceClick() }
+    }
+
+    private fun initToolbar(parentView: View) {
+        val toolbar = parentView.findViewById<Toolbar>(R.id.toolbar)
+        val activity = activity as AppCompatActivity
+        activity.setSupportActionBar(toolbar)
+    }
+
+    private fun changeToolbarTitle(title: String) {
+        toolbar.title = title
     }
 
     private fun initFab() {
@@ -86,64 +148,66 @@ class AccountFragment : AppFragment() {
     }
 
     private fun initCurrenciesRadioGroup() {
-        rg_currencies.check(R.id.btn_rub)
+        rg_currencies.check(R.id.rub_radio_button)
         rg_currencies.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-
-            }
+            viewModel.onCurrencyRadioGroupClick(checkedId)
         }
     }
 
     private fun initTransactionsList() {
-        transactionsAdapter = TransactionsRVAdapter()
-        rv_actions.adapter = transactionsAdapter
-        rv_actions.layoutManager = LinearLayoutManager(context)
-        rv_actions.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        transactionsAdapter = TransactionsRecyclerAdapter(this)
+        transactions_recycler_view.adapter = transactionsAdapter
+        transactions_recycler_view.layoutManager = LinearLayoutManager(context)
+        transactions_recycler_view.itemAnimator = DefaultItemAnimator()
+        transactions_recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                if (dy > 20 && fab_add.visibility == View.VISIBLE) {
+                if (dy > 10 && fab_add.visibility == View.VISIBLE) {
                     fab_add.collapse()
                     fab_add.visibility = View.GONE
                     return
                 }
-                if (dy < -20 && fab_add.visibility != View.VISIBLE) {
+                if (dy < -10 && fab_add.visibility != View.VISIBLE) {
                     fab_add.visibility = View.VISIBLE
                     return
                 }
             }
         })
+
+        val swipeHandler = object : SwipeToDeleteCallback(context!!) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = transactions_recycler_view.adapter as TransactionsRecyclerAdapter
+                adapter.removeItem(viewHolder.adapterPosition)
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(swipeHandler)
+        itemTouchHelper.attachToRecyclerView(transactions_recycler_view)
     }
 
-    private fun initCurrencies() {}
-
     private fun subscribeToViewModel() {
-        viewModel.currentBalanceLiveData.observe(this, Observer { resource ->
-            when (resource?.status) {
-                Status.SUCCESS -> resource.data?.let { processSuccessBalanceResponse(resource.data) }
-                Status.LOADING -> processLoadingState()
-                Status.ERROR -> processErrorState()
-            }
-        })
+        viewModel.currentBalanceLiveData.observe(this, Observer { currencyAmount -> currencyAmount?.let { showCurrencyAmount(currencyAmount) } })
 
         viewModel.transactionsLiveData.observe(this, Observer { resource ->
             when (resource?.status) {
                 Status.SUCCESS -> resource.data?.let { processSuccessTransactionsResponse(it) }
-                Status.LOADING -> processLoadingState()
+                Status.LOADING -> {
+                }
                 Status.ERROR -> processErrorState()
             }
         })
 
         viewModel.incomeLiveData.observe(this, Observer { amount ->
-            amount?.let { tv_incomes.amount = amount.toFloat() }
+            amount?.let { incomes_text_view.amount = amount.toFloat() }
         })
 
         viewModel.expenseLiveData.observe(this, Observer { amount ->
-            amount?.let { tv_expenses.amount = amount.toFloat() }
+            amount?.let { expenses_text_view.amount = amount.toFloat() }
         })
         viewModel.usdExchangeRateLiveData.observe(this, Observer { response ->
             when (response?.status) {
                 Status.ERROR -> processErrorState()
                 Status.SUCCESS -> processSuccessFirstExchangeRate(response.data)
-                Status.LOADING -> processLoadingState()
+                Status.LOADING -> {
+                }
             }
         })
 
@@ -151,7 +215,8 @@ class AccountFragment : AppFragment() {
             when (response?.status) {
                 Status.ERROR -> processErrorState()
                 Status.SUCCESS -> processSuccessSecondExchangeRate(response.data)
-                Status.LOADING -> processLoadingState()
+                Status.LOADING -> {
+                }
             }
         })
     }
@@ -166,35 +231,25 @@ class AccountFragment : AppFragment() {
     }
 
     private fun processErrorState() {
-        hideProgressBar()
         showToast(R.string.error_loading_data)
-    }
-
-    private fun hideProgressBar() {
-        progressBar.visibility = View.GONE
     }
 
     private fun processSuccessFirstExchangeRate(rate: Double?) {
         currency_top_exchange_rate.text = formatter.format(rate)
-        hideProgressBar()
     }
 
     private fun processSuccessSecondExchangeRate(rate: Double?) {
         currency_bottom_exchange_rate.text = formatter.format(rate)
-        hideProgressBar()
     }
 
-    private fun processLoadingState() {
-        showProgressBar()
-    }
-
-    private fun showProgressBar() {
-        progressBar.visibility = View.VISIBLE
-    }
-
-    private fun processSuccessBalanceResponse(amount: Double) {
-        tv_balance.setSymbol(getString(R.string.rub_sign))
-        tv_balance.amount = amount.toFloat()
+    private fun showCurrencyAmount(currencyAmount: CurrencyAmount) {
+        tv_balance.setSymbol(
+                when (currencyAmount.currency) {
+                    Currency.RUB -> getString(R.string.rub_sign)
+                    Currency.EUR -> getString(R.string.euro_sign)
+                    Currency.USD -> getString(R.string.dollar_sign)
+                })
+        tv_balance.amount = currencyAmount.amount.toFloat()
     }
 
     private fun processSuccessTransactionsResponse(data: List<Transaction>) {

@@ -1,18 +1,18 @@
 package ru.popov.bodya.di.common.app
 
-import ru.popov.bodya.app.MoneyTrackerApplication
+import ru.popov.bodya.app.HowMoneyApplication
 
 /**
  *  @author popovbodya
  */
 object AppInjector {
 
-    fun init(moneyTrackerApp: MoneyTrackerApplication) {
+    fun init(howMoneyApp: HowMoneyApplication) {
 
         DaggerAppComponent.builder()
-                .application(moneyTrackerApp)
-                .appContext(moneyTrackerApp)
+                .application(howMoneyApp)
+                .appContext(howMoneyApp)
                 .build()
-                .inject(moneyTrackerApp)
+                .inject(howMoneyApp)
     }
 }

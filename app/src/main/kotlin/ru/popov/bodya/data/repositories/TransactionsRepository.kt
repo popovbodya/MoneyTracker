@@ -31,11 +31,33 @@ class TransactionsRepository(private val transactionsDao: TransactionsDao,
                         .map { transactionsEntityConverter.convert(it) }
             }
 
-    fun addIncomeTransaction(transaction: Transaction): Completable {
+    fun getTransactionsByWalletAndDate(walletType: WalletType, startDate: Long, endDate: Long): Single<List<Transaction>> =
+            Single.fromCallable {
+                transactionsDao.getAllTransactionsByWalletAndDate(walletType, startDate, endDate)
+                        .map { transactionsEntityConverter.convert(it) }
+            }
+
+    fun getIncomeTransactionsByWalletAndDate(walletType: WalletType, startDate: Long, endDate: Long): Single<List<Transaction>> =
+            Single.fromCallable {
+                transactionsDao.getIncomeTransactionsByWalletAndDate(walletType, startDate, endDate)
+                        .map { transactionsEntityConverter.convert(it) }
+            }
+
+    fun getExpenseTransactionsByWalletAndDate(walletType: WalletType, startDate: Long, endDate: Long): Single<List<Transaction>> =
+            Single.fromCallable {
+                transactionsDao.getExpenseTransactionsByWalletAndDate(walletType, startDate, endDate)
+                        .map { transactionsEntityConverter.convert(it) }
+            }
+
+    fun addTransaction(transaction: Transaction): Completable {
         return Completable.fromAction { transactionsDao.insert(transactionsEntityConverter.reverse(transaction)) }
     }
 
-    fun addExpenseTransaction(transaction: Transaction): Completable {
-        return Completable.fromAction { transactionsDao.insert(transactionsEntityConverter.reverse(transaction)) }
+    fun removeTransaction(transaction: Transaction): Completable {
+        return Completable.fromAction { transactionsDao.deleteTransaction(transaction.transactionId) }
+    }
+
+    fun addTransactionList(transactionList: List<Transaction>) {
+        transactionsDao.insertAll(transactionsEntityConverter.reverseList(transactionList))
     }
 }

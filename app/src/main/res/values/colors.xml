@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ffffff</color>
-    <color name="colorPrimaryDark">#eeeeee</color>
-    <color name="colorAccent">#F44336</color>
-    <color name="greyLight">#e0e0e0</color>
+
+    <color name="colorPrimary">#ffeb3b</color>
+    <color name="colorPrimaryDark">#c8b900</color>
+    <color name="colorAccent">#ff0900</color>
     <color name="greyWarm">#eaeff1</color>
-    <color name="grey">#757575</color>
     <color name="greyDark">#424242</color>
-    <color name="gradientStart">#2b2b2b</color>
-    <color name="gradientEnd">#000000</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
-    <color name="settingsBackgroundColor">#81f9f8f8</color>
     <color name="transactionTypeColor">#757575</color>
     <color name="colorExpense">#d50000</color>
     <color name="colorIncome">#00c853</color>
     <color name="black_semi_transparent">#B2000000</color>
+
+    <color name="statistics_month_card_view_color">#ffeb3b</color>
 </resources>

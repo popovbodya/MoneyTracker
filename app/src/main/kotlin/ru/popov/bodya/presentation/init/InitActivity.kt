@@ -12,6 +12,7 @@ import ru.popov.bodya.presentation.account.AccountActivity
 import ru.popov.bodya.presentation.common.Screens.ACCOUNT_ACTIVITY
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.SupportAppNavigator
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -60,7 +61,10 @@ class InitActivity : AppActivity() {
         override fun createActivityIntent(context: Context, screenKey: String, data: Any?): Intent? {
             return when (screenKey) {
                 ACCOUNT_ACTIVITY -> Intent(this@InitActivity, AccountActivity::class.java)
-                else -> null
+                else -> {
+                    Timber.d("InitActivity createActivityIntent with screenKey: $screenKey")
+                    null
+                }
             }
         }
 

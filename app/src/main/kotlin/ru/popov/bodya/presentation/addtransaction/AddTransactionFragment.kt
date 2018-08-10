@@ -6,46 +6,35 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.jakewharton.rxbinding2.widget.RxTextView
-import com.lounah.moneytracker.data.entities.Status
-import com.lounah.moneytracker.ui.wallet.addtransaction.AddTransactionView
-import com.lounah.moneytracker.ui.wallet.addtransaction.CategoriesRVAdapter
-import com.lounah.wallettracker.R
+import android.widget.SeekBar
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
-import kotlinx.android.synthetic.main.fragment_add_transaction.*
+import kotlinx.android.synthetic.main.add_transaction_fragment_layout.*
+import ru.popov.bodya.R
 import ru.popov.bodya.core.mvwhatever.AppFragment
 import ru.popov.bodya.domain.currency.model.Currency
 import ru.popov.bodya.domain.transactions.models.TransactionsCategory
 import ru.popov.bodya.domain.transactions.models.WalletType
-import ru.terrakok.cicerone.Router
+import ru.popov.bodya.presentation.addtransaction.adapter.CategoriesAdapter
 import timber.log.Timber
 import javax.inject.Inject
 
-class AddTransactionFragment : AppFragment(), AddTransactionView {
+class AddTransactionFragment : AppFragment() {
 
-    @Inject
-    lateinit var router: Router
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     @Inject
     lateinit var viewModel: AddTransactionViewModel
 
-    private lateinit var categoriesAdapter: CategoriesRVAdapter
-    private lateinit var inputDisposable: Disposable
-
+    private lateinit var categoriesAdapter: CategoriesAdapter
     private lateinit var selectedWallet: WalletType
     private lateinit var selectedCurrency: Currency
     private lateinit var selectedCategory: TransactionsCategory
-    private lateinit var comment: String
-    private var amount: Double = 0.0
     private var isIncome = false
 
     companion object {
@@ -72,7 +61,7 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val parentView = inflater.inflate(R.layout.fragment_add_transaction, container, false)
+        val parentView = inflater.inflate(R.layout.add_transaction_fragment_layout, container, false)
         setHasOptionsMenu(true)
         initToolbar(parentView)
         return parentView
@@ -91,35 +80,24 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
 
     override fun onStop() {
         super.onStop()
-        inputDisposable.dispose()
         removeObservers()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                router.exit()
+                viewModel.onHomeButtonClicked()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    override fun onTransactionCreated() {
-        Toast.makeText(activity, "onTransactionCreated", Toast.LENGTH_LONG).show()
-    }
-
     private fun subscribeToViewModel() {
         viewModel.transactionCategoriesLiveData.observe(this, Observer { categoriesList ->
-            categoriesList?.apply { categoriesAdapter.setCategoriesList(this) }
-        })
-
-        viewModel.transactionAddStatus.observe(this, Observer { resource ->
-            when (resource?.status) {
-                Status.SUCCESS -> router.exitWithMessage("Transaction added!")
-                Status.ERROR -> router.showSystemMessage("Transaction addition failed")
-                Status.LOADING -> router.showSystemMessage("Loading")
-                null -> router.showSystemMessage("Transaction addition failed")
+            categoriesList?.apply {
+                selectedCategory = this[0]
+                categoriesAdapter.setCategoriesList(this)
             }
         })
     }
@@ -136,14 +114,14 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
     }
 
     private fun initUI() {
+        initCreateTransactionButton()
         initCategoriesList()
         initInputListeners()
-        initCreateTransactionButton()
         initRadioGroups()
     }
 
     private fun initCategoriesList() {
-        categoriesAdapter = CategoriesRVAdapter(object : OnItemSelectedCallback {
+        categoriesAdapter = CategoriesAdapter(object : OnItemSelectedCallback {
             override fun onCategorySelected(type: TransactionsCategory) {
                 selectedCategory = type
                 Timber.d("selectedCategory= $selectedCategory")
@@ -153,48 +131,84 @@ class AddTransactionFragment : AppFragment(), AddTransactionView {
     }
 
     private fun initInputListeners() {
-        val inputObserver: Observable<Boolean> = Observable.combineLatest(
-                RxTextView.textChanges(transaction_sum_edit_text),
-                RxTextView.textChanges(comment_edit_text),
-                BiFunction { amount, comment ->
-                    amount.isNotEmpty()
-                            && this::selectedCurrency.isInitialized
-                            && comment.isNotEmpty()
-                            && rg_currencies.checkedRadioButtonId != -1
-                            && wallets_segmented_group.checkedRadioButtonId != -1
-                })
-        inputDisposable = inputObserver.subscribe(btn_create_transaction::setEnabled)
+        transaction_sum_edit_text.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                checkValues()
+            }
+
+        })
+        comment_edit_text.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                checkValues()
+            }
+
+        })
+
+        seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+
+                periodic_transaction_text_view.text = when (progress) {
+                    0 -> resources.getString(R.string.periodic_transaction_no_repetition)
+                    1 -> resources.getString(R.string.periodic_transaction_1_hour)
+                    2 -> resources.getString(R.string.periodic_transaction_12_hour)
+                    3 -> resources.getString(R.string.periodic_transaction_1_day)
+                    4 -> resources.getString(R.string.periodic_transaction_2_day)
+                    5 -> resources.getString(R.string.periodic_transaction_7_day)
+                    6 -> resources.getString(R.string.periodic_transaction_1_month)
+                    else -> resources.getString(R.string.periodic_transaction_no_repetition)
+                }
+                viewModel.onTransactionPeriodChanged(progress)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
     }
 
     private fun initCreateTransactionButton() {
-        btn_create_transaction.setOnClickListener {
-            amount = transaction_sum_edit_text.text.toString().toDouble()
-            comment = comment_edit_text.text.toString()
-            viewModel.onAddTransactionButtonClick(selectedWallet, selectedCategory, selectedCurrency, amount, comment)
+        create_transaction_button.isEnabled = false
+        create_transaction_button.setOnClickListener {
+            val amount = transaction_sum_edit_text.text.toString().toDouble()
+            val comment = comment_edit_text.text.toString()
+            transaction_sum_edit_text.clearFocus()
+            comment_edit_text.clearFocus()
+            viewModel.onAddTransactionButtonClick(selectedWallet, selectedCategory, selectedCurrency, amount, comment, periodic_transaction_text_view.text.toString())
         }
     }
 
     private fun initRadioGroups() {
 
-        rg_currencies.setOnCheckedChangeListener { group, checkedId ->
+        rg_currencies.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
-                R.id.btn_rub -> selectedCurrency = Currency.RUB
-                R.id.btn_usd -> selectedCurrency = Currency.USD
-                R.id.btn_eur -> selectedCurrency = Currency.EUR
+                R.id.rub_radio_button -> selectedCurrency = Currency.RUB
+                R.id.usd_radio_button -> selectedCurrency = Currency.USD
+                R.id.euro_radio_button -> selectedCurrency = Currency.EUR
             }
+            checkValues()
         }
-        wallets_segmented_group.setOnCheckedChangeListener { group, checkedId ->
+        wallets_segmented_group.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.cash_radio_button -> selectedWallet = WalletType.CASH
                 R.id.bank_account_radio_button -> selectedWallet = WalletType.BANK_ACCOUNT
                 R.id.credit_radio_button -> selectedWallet = WalletType.CREDIT_CARD
             }
+            checkValues()
         }
+    }
+
+    private fun checkValues() {
+        create_transaction_button.isEnabled = (transaction_sum_edit_text.text.isNotEmpty() && comment_edit_text.text.isNotEmpty()
+                && this::selectedCurrency.isInitialized
+                && rg_currencies.checkedRadioButtonId != -1
+                && wallets_segmented_group.checkedRadioButtonId != -1)
     }
 
     private fun removeObservers() {
         viewModel.transactionCategoriesLiveData.removeObservers(this)
-        viewModel.transactionAddStatus.removeObservers(this)
     }
 
     interface OnItemSelectedCallback {

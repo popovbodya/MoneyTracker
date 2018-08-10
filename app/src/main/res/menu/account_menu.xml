@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:icon="@drawable/ic_swap"
+        android:title="@string/wallet"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/cashWallet"
+                android:title="@string/wallet" />
+            <item
+                android:id="@+id/creditWallet"
+                android:title="@string/credit_card" />
+            <item
+                android:id="@+id/bankWallet"
+                android:title="@string/bank_account" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/periodical_transactions"
+        android:icon="@drawable/ic_timetable"
+        android:title="@string/periodic_transactions_title"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
+
+    <item
+        android:id="@+id/about"
+        android:icon="@drawable/ic_information"
+        android:title="@string/about_application"
+        app:showAsAction="ifRoom" />
+</menu>

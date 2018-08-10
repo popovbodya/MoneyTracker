@@ -7,12 +7,15 @@ import ru.popov.bodya.domain.currency.model.Currency
 import ru.popov.bodya.domain.transactions.models.Transaction
 import ru.popov.bodya.domain.transactions.models.TransactionsCategory
 import ru.popov.bodya.domain.transactions.models.WalletType
-import java.util.*
 
 /**
  * @author popovbodya
  */
 class TransactionsInteractor(private val transactionsRepository: TransactionsRepository) {
+
+    companion object {
+        const val DEFAULT_ID = 0
+    }
 
     fun getAllTransactionsByWallet(walletType: WalletType): Single<List<Transaction>> =
             transactionsRepository.getAllTransactionsByWallet(walletType)
@@ -23,11 +26,30 @@ class TransactionsInteractor(private val transactionsRepository: TransactionsRep
     fun getExpenseTransactionsByWallet(walletType: WalletType): Single<List<Transaction>> =
             transactionsRepository.getExpenseTransactionsByWallet(walletType)
 
-    fun addIncomeTransaction(selectedWallet: WalletType, selectedCategory: TransactionsCategory.Income, selectedCurrency: Currency, amount: Double, date: Date, comment: String): Completable {
-        return transactionsRepository.addIncomeTransaction(Transaction(selectedWallet, selectedCurrency, selectedCategory, amount, date, comment))
+    fun addTransaction(selectedWallet: WalletType, selectedCategory: TransactionsCategory, selectedCurrency: Currency, amount: Double, time: Long, comment: String): Completable {
+        return transactionsRepository.addTransaction(Transaction(DEFAULT_ID, selectedWallet, selectedCurrency, selectedCategory, amount, time, comment))
     }
 
-    fun addExpenseTransaction(selectedWallet: WalletType, selectedCategory: TransactionsCategory.Expense, selectedCurrency: Currency, amount: Double, date: Date, comment: String): Completable {
-        return transactionsRepository.addExpenseTransaction(Transaction(selectedWallet, selectedCurrency, selectedCategory, amount, date, comment))
+    fun addTransactionList(transactionList: List<Transaction>) {
+        transactionsRepository.addTransactionList(transactionList)
     }
+
+    fun removeTransaction(transaction: Transaction): Completable {
+        return transactionsRepository.removeTransaction(transaction)
+    }
+
+    fun getTransactionsPair(transactionList: List<Transaction>): Pair<List<Transaction>, List<Transaction>> {
+        val incomeList: MutableList<Transaction> = mutableListOf()
+        val exposeList: MutableList<Transaction> = mutableListOf()
+        transactionList.forEach { transaction ->
+            when (transaction.category) {
+                is TransactionsCategory.ExpenseTransactionsCategory -> exposeList.add(transaction)
+                is TransactionsCategory.IncomeTransactionsCategory -> incomeList.add(transaction)
+            }
+        }
+        return Pair(incomeList, exposeList)
+    }
+
+    fun getPairDiff(pair: Pair<Double, Double>): Double = pair.first - pair.second
+
 }

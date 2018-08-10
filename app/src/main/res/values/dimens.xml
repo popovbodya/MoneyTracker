@@ -1,9 +1,34 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="nav_header_vertical_spacing">8dp</dimen>
-    <dimen name="nav_header_height">176dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="app_margin">16dp</dimen>
+    <!-- Common -->
+    <dimen name="app_margin_0dp">0dp</dimen>
+    <dimen name="app_margin_4dp">4dp</dimen>
+    <dimen name="app_margin_8dp">8dp</dimen>
+    <dimen name="app_margin_16dp">16dp</dimen>
+    <dimen name="app_margin_24dp">24dp</dimen>
+    <dimen name="app_margin_32dp">32dp</dimen>
+    <dimen name="app_cardview_elevation">4dp</dimen>
+    <dimen name="app_card_cardview_corner_radius">6dp</dimen>
+    <dimen name="app_image_view_size">24dp</dimen>
+
+    <dimen name="app_padding_4dp">4dp</dimen>
+
+    <!-- Zero -->
+    <dimen name="zero_imageview_size">100dp</dimen>
+
+    <!-- Statistics -->
+    <dimen name="months_viewpager_height">60dp</dimen>
+    <dimen name="piechart_height">300dp</dimen>
+
+    <!-- Transactions -->
+    <dimen name="transaction_category_title_width">128dp</dimen>
+    <dimen name="rates_card_view_width">128dp</dimen>
+    <dimen name="amount_card_view_height">60dp</dimen>
+    <dimen name="month_cardview_conrer_radius">16dp</dimen>
+    <dimen name="add_transaction_oprtion_card_view">4dp</dimen>
+
+    <!-- Transactions -->
+    <dimen name="about_image_view_size">190dp</dimen>
+
+
+
 </resources>

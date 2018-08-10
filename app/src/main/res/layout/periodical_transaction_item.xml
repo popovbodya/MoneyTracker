@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/app_margin_8dp"
+    app:cardCornerRadius="@dimen/app_card_cardview_corner_radius"
+    app:cardElevation="@dimen/app_cardview_elevation">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/currency_type_image_view"
+            android:layout_width="@dimen/app_image_view_size"
+            android:layout_height="@dimen/app_margin_0dp"
+            android:layout_margin="@dimen/app_margin_16dp"
+            android:layout_marginBottom="@dimen/app_margin_8dp"
+            android:layout_marginStart="@dimen/app_margin_16dp"
+            android:layout_marginTop="@dimen/app_margin_8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_auto" />
+
+        <TextView
+            android:id="@+id/transaction_category_text_view"
+            style="@style/TextStyle.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/app_margin_16dp"
+            android:layout_marginTop="@dimen/app_margin_16dp"
+            app:layout_constraintStart_toEndOf="@+id/currency_type_image_view"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Дом" />
+
+        <TextView
+            android:id="@+id/transaction_period_text_view"
+            style="@style/TextStyle.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/app_margin_16dp"
+            android:layout_marginTop="@dimen/app_margin_16dp"
+            app:layout_constraintStart_toEndOf="@+id/transaction_category_text_view"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Период: каждые полчаса" />
+
+        <TextView
+            android:id="@+id/date_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/app_margin_16dp"
+            android:layout_marginTop="@dimen/app_margin_16dp"
+            app:layout_constraintStart_toEndOf="@+id/currency_type_image_view"
+            app:layout_constraintTop_toBottomOf="@+id/transaction_category_text_view"
+            tools:text="5.08.2018" />
+
+        <TextView
+            android:id="@+id/transaction_description_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/app_margin_16dp"
+            android:layout_marginTop="@dimen/app_margin_16dp"
+            app:layout_constraintStart_toEndOf="@+id/date_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/transaction_category_text_view"
+            tools:text="Классная вечеринка" />
+
+
+        <TextView
+            android:id="@+id/currency_text_view"
+            style="@style/TextStyle.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/app_margin_16dp"
+            android:layout_marginTop="@dimen/app_margin_16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="RUB" />
+
+
+        <org.fabiomsr.moneytextview.MoneyTextView
+            android:id="@+id/amount_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/app_margin_16dp"
+            android:layout_marginEnd="@dimen/app_margin_16dp"
+            android:layout_marginTop="@dimen/app_margin_8dp"
+            app:baseTextSize="18sp"
+            app:decimalDigitsTextSize="13sp"
+            app:decimalGravity="bottom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/currency_text_view"
+            app:symbolTextSize="0sp" />
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>
+

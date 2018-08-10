@@ -2,19 +2,18 @@ package ru.popov.bodya.domain.currency
 
 import io.reactivex.Single
 import ru.popov.bodya.data.repositories.CurrenciesRepository
-import ru.popov.bodya.domain.currency.model.ExchangeRates
+import ru.popov.bodya.domain.currency.model.Rates
 
 /**
  * @author popovbodya
  */
 class CurrencyInteractor(private val currenciesRepository: CurrenciesRepository) {
 
-    fun getExchangeRate(): Single<ExchangeRates> = currenciesRepository.getExchangeRate()
+    fun getExchangeRate(): Single<Rates> = currenciesRepository.getExchangeRateSingle()
 
-    fun getCachedExchangeRate(): Single<ExchangeRates> = currenciesRepository.getCachedExchangeRate()
+    fun getCachedExchangeRate(): Single<Rates> = currenciesRepository.getCachedExchangeRateSingle()
 
-    fun getUsdRate(exchangeRates: ExchangeRates): Double = 1 / exchangeRates.rates.usd
+    fun getUsdRate(usdRate: Double): Double = 1 / usdRate
 
-    fun getEurRate(exchangeRates: ExchangeRates): Double = 1 / exchangeRates.rates.eur
-
+    fun getEurRate(eurRate: Double): Double = 1 / eurRate
 }

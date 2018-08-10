@@ -1,17 +1,9 @@
 <resources>
-    <string name="app_name">WalletTracker</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="app_name">How Money</string>
 
-    <string name="action_settings">Settings</string>
-
-    <string name="balance">Баланс</string>
     <string name="food">Еда</string>
     <string name="clothes">Одежда</string>
-    <string name="communal_payments">Коммунальные платежи</string>
+    <string name="communal_payments">ЖКХ</string>
     <string name="rest">Отдых</string>
     <string name="education">Образование</string>
     <string name="home">Дом</string>
@@ -23,49 +15,45 @@
     <string name="gift">Подарок</string>
     <string name="transfer">Перевод</string>
 
-    <string name="current_currency">Текущий курс валют</string>
     <string name="transaction_amount">Сумма транзакции</string>
     <string name="transaction_currency">Валюта транзакции</string>
     <string name="transaction_commentary">Комментарий к транзакции</string>
-    <string name="please_type_here_short_comment">Короткий комментарий</string>
     <string name="create">Создать</string>
 
-    <string name="savings">Сбережения</string>
-    <string name="current_balance">Текущий баланс</string>
     <string name="create_transaction">Добавить транзакцию</string>
     <string name="transaction_category">Категория транзакции</string>
     <string name="transaction_wallet">Кошелек транзакции</string>
-    <string name="credit_card">Кредитная карта</string>
+    <string name="credit_card">Кредитные карты</string>
     <string name="bank_account">Банковский счет</string>
-    <string name="wallet">Кошелек</string>
-    <string name="settings">Настройки</string>
-    <string name="log_out">Выйти</string>
+    <string name="wallet">Наличные</string>
 
-    <string name="all_transactions">Все транзакции</string>
+    <string name="periodic_transactions_title">Периодические транзакции</string>
+    <string name="periodic_transaction_no_repetition">Без повторений</string>
+    <string name="periodic_transaction_1_hour">Повторение каждый час</string>
+    <string name="periodic_transaction_12_hour">Повторение каждые полдня</string>
+    <string name="periodic_transaction_1_day">Повторение каждый день</string>
+    <string name="periodic_transaction_2_day">Повторение каждые два дня</string>
+    <string name="periodic_transaction_7_day">Повторение каждую неделю</string>
+    <string name="periodic_transaction_1_month">Повторение каждый месяц</string>
+
+    <string name="all_transactions">Транзакции за текущий месяц</string>
     <string name="incomes">Доходы</string>
     <string name="expenses">Расходы</string>
-    <string name="last_update_time">Обновлено: </string>
-    <string name="settings_username">Пользователь</string>
 
-    <string name="developers">Разработчики</string>
-    <string name="confidentiality_policy">Политика конфиденциальности</string>
-    <string name="notifications">Уведомления</string>
+    <string name="statistic_income_title">Доходы: %s</string>
+    <string name="statistic_expense_title">Расходы: %s</string>
+    <string name="zero_screen_no_data">Транзакций не найдено</string>
+
     <string name="about_application">О приложении</string>
-    <string name="other_settings">Другие настройки</string>
-    <string name="major_currency">Основная валюта</string>
-
     <string name="version_code">Версия приложения: %1$s</string>
-    <string name="copyright">© 2018 #Lounah</string>
+    <string name="author">Автор: Попов Богдан</string>
 
-    <string name="buy_rate">Покупка</string>
-    <string name="sell_rate">Продажа</string>
-    <string name="cash">Основной кошелек</string>
+    <string name="cash">Наличные</string>
     <string name="statistics">Статистика</string>
     <string name="new_income">Новый доход</string>
     <string name="new_expense">Новый расход</string>
-
-    <string name="graphics">Graphics</string>
     <string name="error_loading_data">Произошла ошибка при загрузке данных</string>
+
     <string name="dollar_sign">$</string>
     <string name="rub_sign">₽</string>
     <string name="euro_sign">€</string>
@@ -73,31 +61,6 @@
     <string name="rub">RUB</string>
     <string name="usd">USD</string>
     <string name="eur">EUR</string>
-
-    <string-array name="currencies">
-        <item>@string/rub</item>
-        <item>@string/usd</item>
-        <item>@string/eur</item>
-    </string-array>
-
-    <string-array name="wallets">
-        <item>@string/cash</item>
-        <item>@string/bank_account</item>
-        <item>@string/credit_card</item>
-    </string-array>
-
-    <string-array name="transaction_categories">
-        <item>@string/food</item>
-        <item>@string/clothes</item>
-        <item>@string/rest</item>
-        <item>@string/education</item>
-        <item>@string/home</item>
-        <item>@string/family</item>
-        <item>@string/auto</item>
-        <item>@string/treatment</item>
-        <item>@string/salary</item>
-        <item>@string/other</item>
-    </string-array>
 
 </resources>
 

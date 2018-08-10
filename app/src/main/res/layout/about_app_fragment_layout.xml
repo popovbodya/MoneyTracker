@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize" />
+    </android.support.design.widget.AppBarLayout>
+
+    <ImageView
+        android:id="@+id/app_icon_image_view"
+        android:layout_width="@dimen/about_image_view_size"
+        android:layout_height="@dimen/about_image_view_size"
+        android:layout_below="@id/app_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/app_margin_32dp"
+        app:srcCompat="@drawable/app_icon" />
+
+    <TextView
+        android:id="@+id/app_name_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_icon_image_view"
+        android:layout_margin="@dimen/app_margin_24dp"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textColor="@color/greyDark"
+        android:textSize="26sp" />
+
+    <TextView
+        android:id="@+id/app_version_text_view"
+        style="@style/TextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_name_text_view"
+        android:layout_margin="@dimen/app_margin_24dp"
+        android:textAlignment="center"
+        android:textColor="@color/greyDark" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_version_text_view"
+        android:gravity="center"
+        android:text="@string/author"
+        android:textAppearance="@style/TextStyle" />
+
+</RelativeLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/statistics_month_card_view_color"
+    app:cardCornerRadius="@dimen/month_cardview_conrer_radius"
+    android:layout_margin="@dimen/app_margin_4dp"
+    app:cardElevation="@dimen/cardview_default_elevation">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/current_month_title_text_view"
+        android:layout_gravity="center"
+        android:padding="8dp"
+        android:textAppearance="@style/TextStyle"
+        tools:text="Июнь 1995" />
+
+</android.support.v7.widget.CardView>
+
+
+
