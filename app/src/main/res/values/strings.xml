@@ -1,12 +1,10 @@
 <resources>
     <string name="app_name">How Money</string>
 
-
-
     <string name="balance">Баланс</string>
     <string name="food">Еда</string>
     <string name="clothes">Одежда</string>
-    <string name="communal_payments">Коммунальные платежи</string>
+    <string name="communal_payments">ЖКХ</string>
     <string name="rest">Отдых</string>
     <string name="education">Образование</string>
     <string name="home">Дом</string>
@@ -25,16 +23,13 @@
     <string name="please_type_here_short_comment">Короткий комментарий</string>
     <string name="create">Создать</string>
 
-    <string name="savings">Сбережения</string>
     <string name="current_balance">Текущий баланс</string>
     <string name="create_transaction">Добавить транзакцию</string>
     <string name="transaction_category">Категория транзакции</string>
     <string name="transaction_wallet">Кошелек транзакции</string>
-    <string name="credit_card">Кредитная карта</string>
+    <string name="credit_card">Кредитные карты</string>
     <string name="bank_account">Банковский счет</string>
-    <string name="wallet">Кошелек</string>
-    <string name="settings">Настройки</string>
-    <string name="log_out">Выйти</string>
+    <string name="wallet">Наличные</string>
 
     <string name="periodic_transactions_title">Периодические транзакции</string>
     <string name="periodic_transaction_no_repetition">Без повторений</string>
@@ -48,20 +43,12 @@
     <string name="all_transactions">Транзакции за текущий месяц</string>
     <string name="incomes">Доходы</string>
     <string name="expenses">Расходы</string>
-    <string name="last_update_time">Обновлено: </string>
-    <string name="settings_username">Пользователь</string>
 
     <string name="statistic_income_title">Доходы: %s</string>
     <string name="statistic_expense_title">Расходы: %s</string>
     <string name="statistic_no_data">Транзакций не найдено</string>
 
-    <string name="developers">Разработчики</string>
-    <string name="confidentiality_policy">Политика конфиденциальности</string>
-    <string name="notifications">Уведомления</string>
     <string name="about_application">О приложении</string>
-    <string name="other_settings">Другие настройки</string>
-    <string name="major_currency">Основная валюта</string>
-
     <string name="version_code">Версия приложения: %1$s</string>
     <string name="author">Автор: Попов Богдан</string>
 
@@ -71,9 +58,8 @@
     <string name="statistics">Статистика</string>
     <string name="new_income">Новый доход</string>
     <string name="new_expense">Новый расход</string>
-
-    <string name="graphics">Graphics</string>
     <string name="error_loading_data">Произошла ошибка при загрузке данных</string>
+
     <string name="dollar_sign">$</string>
     <string name="rub_sign">₽</string>
     <string name="euro_sign">€</string>

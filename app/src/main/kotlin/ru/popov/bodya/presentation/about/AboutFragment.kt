@@ -9,7 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_about_app.*
+import kotlinx.android.synthetic.main.about_app_fragment_layout.*
 import ru.popov.bodya.R
 import ru.popov.bodya.core.mvwhatever.AppFragment
 import javax.inject.Inject
@@ -25,7 +25,7 @@ class AboutFragment : AppFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val parentView: View = inflater.inflate(R.layout.fragment_about_app, container, false)
+        val parentView: View = inflater.inflate(R.layout.about_app_fragment_layout, container, false)
         initToolbar(parentView)
         return parentView
     }

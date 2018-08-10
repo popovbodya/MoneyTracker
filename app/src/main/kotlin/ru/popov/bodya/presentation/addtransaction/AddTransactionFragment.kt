@@ -11,8 +11,12 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import com.jakewharton.rxbinding2.widget.RxTextView
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.fragment_add_transaction.*
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
+import kotlinx.android.synthetic.main.add_transaction_fragment_layout.*
 import ru.popov.bodya.R
 import ru.popov.bodya.core.mvwhatever.AppFragment
 import ru.popov.bodya.domain.currency.model.Currency
@@ -33,6 +37,7 @@ class AddTransactionFragment : AppFragment() {
     private lateinit var selectedWallet: WalletType
     private lateinit var selectedCurrency: Currency
     private lateinit var selectedCategory: TransactionsCategory
+    private lateinit var fieldsWatcherDisposable: Disposable
     private var isIncome = false
 
     companion object {
@@ -59,7 +64,7 @@ class AddTransactionFragment : AppFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val parentView = inflater.inflate(R.layout.fragment_add_transaction, container, false)
+        val parentView = inflater.inflate(R.layout.add_transaction_fragment_layout, container, false)
         setHasOptionsMenu(true)
         initToolbar(parentView)
         return parentView
@@ -79,6 +84,7 @@ class AddTransactionFragment : AppFragment() {
     override fun onStop() {
         super.onStop()
         removeObservers()
+        fieldsWatcherDisposable.dispose()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -129,17 +135,17 @@ class AddTransactionFragment : AppFragment() {
     }
 
     private fun initInputListeners() {
-//        val inputObserver: Observable<Boolean> = Observable.combineLatest(
-//                RxTextView.textChanges(transaction_sum_edit_text),
-//                RxTextView.textChanges(comment_edit_text),
-//                BiFunction { amount, comment ->
-//                    amount.isNotEmpty()
-//                            && this::selectedCurrency.isInitialized
-//                            && comment.isNotEmpty()
-//                            && rg_currencies.checkedRadioButtonId != -1
-//                            && wallets_segmented_group.checkedRadioButtonId != -1
-//                })
-//        inputDisposable = inputObserver.subscribe(btn_create_transaction::setEnabled)
+        val inputObserver: Observable<Boolean> = Observable.combineLatest(
+                RxTextView.textChanges(transaction_sum_edit_text),
+                RxTextView.textChanges(comment_edit_text),
+                BiFunction { amount, comment ->
+                    amount.isNotEmpty()
+                            && comment.isNotEmpty()
+                            && this::selectedCurrency.isInitialized
+                            && rg_currencies.checkedRadioButtonId != -1
+                            && wallets_segmented_group.checkedRadioButtonId != -1
+                })
+        fieldsWatcherDisposable = inputObserver.subscribe(btn_create_transaction::setEnabled)
 
         seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {

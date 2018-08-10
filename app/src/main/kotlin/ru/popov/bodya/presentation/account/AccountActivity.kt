@@ -42,7 +42,7 @@ class AccountActivity : AppActivity(), HasSupportFragmentInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main_layout)
         if (savedInstanceState == null) {
             router.replaceScreen(WALLET_SCREEN)
         }
