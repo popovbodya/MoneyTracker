@@ -189,7 +189,8 @@ class AccountFragment : AppFragment(), OnTransactionDeletedListener {
         viewModel.transactionsLiveData.observe(this, Observer { resource ->
             when (resource?.status) {
                 Status.SUCCESS -> resource.data?.let { processSuccessTransactionsResponse(it) }
-                Status.LOADING -> {}
+                Status.LOADING -> {
+                }
                 Status.ERROR -> processErrorState()
             }
         })
@@ -205,7 +206,8 @@ class AccountFragment : AppFragment(), OnTransactionDeletedListener {
             when (response?.status) {
                 Status.ERROR -> processErrorState()
                 Status.SUCCESS -> processSuccessFirstExchangeRate(response.data)
-                Status.LOADING -> {}
+                Status.LOADING -> {
+                }
             }
         })
 
@@ -213,7 +215,8 @@ class AccountFragment : AppFragment(), OnTransactionDeletedListener {
             when (response?.status) {
                 Status.ERROR -> processErrorState()
                 Status.SUCCESS -> processSuccessSecondExchangeRate(response.data)
-                Status.LOADING -> {}
+                Status.LOADING -> {
+                }
             }
         })
     }

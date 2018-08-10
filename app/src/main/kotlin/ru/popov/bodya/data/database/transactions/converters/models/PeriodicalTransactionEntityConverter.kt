@@ -8,7 +8,7 @@ import ru.popov.bodya.domain.transactions.models.PeriodicalTransaction
  * @author popovbodya
  */
 class PeriodicalTransactionEntityConverter : Converter<PeriodicalTransaction, PeriodicalTransactionEntity> {
-    override fun reverse(to: PeriodicalTransactionEntity): PeriodicalTransaction  {
+    override fun reverse(to: PeriodicalTransactionEntity): PeriodicalTransaction {
         return PeriodicalTransaction(to.id, to.wallet, to.currency, to.category, to.amount, to.timeUpdated, to.description, to.period, to.periodDescription)
     }
 
