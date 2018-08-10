@@ -10,7 +10,7 @@ class WalletTypeConverter {
     fun fromType(type: WalletType): String = type.name
 
     @TypeConverter
-    fun toCurrency(type: String): WalletType =
+    fun toWallet(type: String): WalletType =
             when (type) {
                 CREDIT_CARD.name -> CREDIT_CARD
                 BANK_ACCOUNT.name -> BANK_ACCOUNT

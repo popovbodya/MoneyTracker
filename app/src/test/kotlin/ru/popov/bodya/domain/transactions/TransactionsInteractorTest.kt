@@ -64,12 +64,12 @@ class TransactionsInteractorTest {
     @Test
     fun testAddIncomeTransaction() {
         val amount = 50.0
-        val time = Calendar.getInstance().time
+        val time = Calendar.getInstance().timeInMillis
         val desc = "gift"
-        val category = TransactionsCategory.Income(IncomeCategory.GIFT)
-        val expectedParam = Transaction(1, CREDIT_CARD, Currency.EUR, category, amount, time, desc)
-        `when`(transactionsRepository.addIncomeTransaction(expectedParam)).thenReturn(Completable.complete())
-        transactionsInteractor.addIncomeTransaction(CREDIT_CARD, category, Currency.EUR, amount, time, desc)
+        val category = TransactionsCategory.IncomeTransactionsCategory(IncomeCategory.GIFT)
+        val expectedParam = Transaction(0, CREDIT_CARD, Currency.EUR, category, amount, time, desc)
+        `when`(transactionsRepository.addTransaction(expectedParam)).thenReturn(Completable.complete())
+        transactionsInteractor.addTransaction(CREDIT_CARD, category, Currency.EUR, amount, time, desc)
                 .test()
                 .assertComplete()
     }
@@ -77,12 +77,12 @@ class TransactionsInteractorTest {
     @Test
     fun testAddExpenseTransaction() {
         val amount = 50.0
-        val time = Calendar.getInstance().time
+        val time = Calendar.getInstance().timeInMillis
         val desc = "food"
-        val category = TransactionsCategory.Expense(ExpenseCategory.FOOD)
-        val expectedParam = Transaction(1, CREDIT_CARD, Currency.USD, category, amount, time, desc)
-        `when`(transactionsRepository.addExpenseTransaction(expectedParam)).thenReturn(Completable.complete())
-        transactionsInteractor.addExpenseTransaction(CREDIT_CARD, category, Currency.USD, amount, time, desc)
+        val category = TransactionsCategory.ExpenseTransactionsCategory(ExpenseCategory.FOOD)
+        val expectedParam = Transaction(0, CREDIT_CARD, Currency.USD, category, amount, time, desc)
+        `when`(transactionsRepository.addTransaction(expectedParam)).thenReturn(Completable.complete())
+        transactionsInteractor.addTransaction(CREDIT_CARD, category, Currency.USD, amount, time, desc)
                 .test()
                 .assertComplete()
     }
@@ -95,20 +95,20 @@ class TransactionsInteractorTest {
     }
 
     private fun createStubExpenseTransactionList(): List<Transaction> {
-        val time = Calendar.getInstance().time
+        val time = Calendar.getInstance().timeInMillis
         return listOf(
-                Transaction(1, CREDIT_CARD, Currency.USD, TransactionsCategory.Expense(ExpenseCategory.FAMILY), 50.0, time, "1"),
-                Transaction(1, CREDIT_CARD, Currency.USD, TransactionsCategory.Expense(ExpenseCategory.FAMILY), 25.0, time, "2")
+                Transaction(0, CREDIT_CARD, Currency.USD, TransactionsCategory.ExpenseTransactionsCategory(ExpenseCategory.FAMILY), 50.0, time, "1"),
+                Transaction(0, CREDIT_CARD, Currency.USD, TransactionsCategory.ExpenseTransactionsCategory(ExpenseCategory.FAMILY), 25.0, time, "2")
         )
     }
 
     private fun createStubIncomeTransactionList(): List<Transaction> {
-        val time = Calendar.getInstance().time
+        val time = Calendar.getInstance().timeInMillis
         return listOf(
-                Transaction(1, CREDIT_CARD, Currency.EUR, TransactionsCategory.Income(IncomeCategory.GIFT), 30.0, time, "3"),
-                Transaction(1, CREDIT_CARD, Currency.USD, TransactionsCategory.Income(IncomeCategory.SALARY), 50.0, time, "4"),
-                Transaction(1, CREDIT_CARD, Currency.RUB, TransactionsCategory.Income(IncomeCategory.OTHER_INCOME), 50.0, time, "5"),
-                Transaction(1, CREDIT_CARD, Currency.RUB, TransactionsCategory.Income(IncomeCategory.OTHER_INCOME), 50.0, time, "6")
+                Transaction(0, CREDIT_CARD, Currency.EUR, TransactionsCategory.IncomeTransactionsCategory(IncomeCategory.GIFT), 30.0, time, "3"),
+                Transaction(0, CREDIT_CARD, Currency.USD, TransactionsCategory.IncomeTransactionsCategory(IncomeCategory.SALARY), 50.0, time, "4"),
+                Transaction(0, CREDIT_CARD, Currency.RUB, TransactionsCategory.IncomeTransactionsCategory(IncomeCategory.OTHER_INCOME), 50.0, time, "5"),
+                Transaction(0, CREDIT_CARD, Currency.RUB, TransactionsCategory.IncomeTransactionsCategory(IncomeCategory.OTHER_INCOME), 50.0, time, "6")
         )
     }
 

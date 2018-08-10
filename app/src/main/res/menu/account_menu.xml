@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/wallet"
         android:icon="@drawable/ic_swap"
         android:title="@string/wallet"
         app:showAsAction="always">

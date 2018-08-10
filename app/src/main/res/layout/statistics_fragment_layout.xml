@@ -29,13 +29,11 @@
             android:orientation="vertical">
 
             <android.support.v4.view.ViewPager
-                android:id="@+id/month_view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/months_viewpager_height"
                 android:layout_marginTop="@dimen/app_margin_8dp" />
 
             <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/chart"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/piechart_height"
                 android:layout_margin="@dimen/app_margin_32dp"
@@ -43,7 +41,6 @@
                 tools:visibility="visible" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/transactions_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/app_margin_8dp"

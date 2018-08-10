@@ -10,14 +10,14 @@ import ru.popov.bodya.domain.transactions.models.TransactionsCategory.IncomeTran
 class TransactionTypeConverter {
 
     @TypeConverter
-    fun fromTransactionTypeToInt(transactionsCategory: TransactionsCategory): String =
+    fun fromTransactionTypeToString(transactionsCategory: TransactionsCategory): String =
             when (transactionsCategory) {
                 is ExpenseTransactionsCategory -> transactionsCategory.expenseCategory.name
                 is TransactionsCategory.IncomeTransactionsCategory -> transactionsCategory.incomeCategory.name
             }
 
     @TypeConverter
-    fun fromIntToTransactionType(type: String): TransactionsCategory {
+    fun fromStringToTransactionType(type: String): TransactionsCategory {
         return when (type) {
             FOOD.name -> ExpenseTransactionsCategory(FOOD)
             HOME.name -> ExpenseTransactionsCategory(HOME)

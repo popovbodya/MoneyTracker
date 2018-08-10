@@ -2,7 +2,6 @@
 
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/transaction_cardview_foreground"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -38,7 +37,6 @@
             tools:text="5.08.2018" />
 
         <TextView
-            android:id="@+id/transaction_description_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/app_margin_16dp"
@@ -71,7 +69,6 @@
             tools:text="Дом" />
 
         <org.fabiomsr.moneytextview.MoneyTextView
-            android:id="@+id/tv_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/app_margin_16dp"

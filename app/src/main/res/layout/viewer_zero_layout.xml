@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/zero_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="gone"
@@ -19,7 +18,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/zero_message_text_view"
         style="@style/TextAppearance.AppCompat.Headline"
         android:layout_width="@dimen/app_margin_0dp"
         android:layout_height="@dimen/app_margin_32dp"

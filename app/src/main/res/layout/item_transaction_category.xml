@@ -16,7 +16,6 @@
         tools:src="@drawable/ic_auto" />
 
     <TextView
-        android:id="@+id/category_text_view"
         style="@style/TextStyle.Small"
         android:layout_width="@dimen/transaction_category_title_width"
         android:layout_height="wrap_content"
