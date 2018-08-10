@@ -30,7 +30,7 @@
                 android:id="@+id/transaction_sum_text_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp">
+                android:layout_margin="@dimen/app_margin_8dp">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/transaction_sum_edit_text"
@@ -44,7 +44,7 @@
                 android:id="@+id/comment_text_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp">
+                android:layout_margin="@dimen/app_margin_8dp">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/comment_edit_text"
@@ -68,12 +68,12 @@
                 android:id="@+id/rg_currencies"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/app_margin_8dp"
                 android:orientation="horizontal"
                 android:weightSum="3"
                 app:sc_border_width="1dp"
                 app:sc_checked_text_color="@color/white"
-                app:sc_corner_radius="4dp"
+                app:sc_corner_radius="@dimen/add_transaction_oprtion_card_view"
                 app:sc_tint_color="@color/black">
 
                 <RadioButton
@@ -116,13 +116,13 @@
                 android:id="@+id/wallets_segmented_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/app_margin_8dp"
                 android:orientation="horizontal"
 
                 android:weightSum="3"
                 app:sc_border_width="1dp"
                 app:sc_checked_text_color="@color/white"
-                app:sc_corner_radius="4dp"
+                app:sc_corner_radius="@dimen/add_transaction_oprtion_card_view"
                 app:sc_tint_color="@color/black">
 
                 <RadioButton
@@ -131,7 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:padding="4dp"
+                    android:padding="@dimen/app_padding_@dimen/app_padding_4dp"
                     android:text="@string/cash"
                     android:textAllCaps="true"/>
 
@@ -141,7 +141,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:padding="4dp"
+                    android:padding="@dimen/app_padding_4dp"
                     android:text="@string/credit_card"
                     android:textAllCaps="true"/>
 
@@ -151,7 +151,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:padding="4dp"
+                    android:padding="@dimen/app_padding_4dp"
                     android:text="@string/bank_account"
                     android:textAllCaps="true"/>
             </info.hoang8f.android.segmented.SegmentedGroup>
@@ -191,7 +191,7 @@
                 android:id="@+id/categories_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/app_margin_8dp"
                 android:orientation="horizontal"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
@@ -205,7 +205,7 @@
                 style="@android:style/Widget.Material.Button.Borderless.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/app_margin"
+                android:layout_margin="@dimen/app_margin_16dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/create"/>
 

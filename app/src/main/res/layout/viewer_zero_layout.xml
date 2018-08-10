@@ -3,35 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/zero_layout"
-    android:visibility="gone"
-    tools:visibility="visible"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:visibility="gone"
+    tools:visibility="visible">
 
     <ImageView
         android:id="@+id/zero_image_view"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/sad_boy"
+        android:layout_width="@dimen/zero_imageview_size"
+        android:layout_height="@dimen/zero_imageview_size"
+        android:src="@drawable/ic_sad_boy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/title_text_view"
+        android:id="@+id/zero_message_text_view"
         style="@style/TextAppearance.AppCompat.Headline"
-        android:layout_width="0dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="@dimen/app_margin_0dp"
+        android:layout_height="@dimen/app_margin_32dp"
+        android:layout_marginEnd="@dimen/app_margin_8dp"
+        android:layout_marginStart="@dimen/app_margin_8dp"
+        android:layout_marginTop="@dimen/app_margin_16dp"
         android:gravity="center"
-        android:text="@string/statistic_no_data"
+        android:text="@string/zero_screen_no_data"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/zero_image_view" />

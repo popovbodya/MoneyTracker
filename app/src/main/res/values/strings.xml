@@ -46,7 +46,7 @@
 
     <string name="statistic_income_title">Доходы: %s</string>
     <string name="statistic_expense_title">Расходы: %s</string>
-    <string name="statistic_no_data">Транзакций не найдено</string>
+    <string name="zero_screen_no_data">Транзакций не найдено</string>
 
     <string name="about_application">О приложении</string>
     <string name="version_code">Версия приложения: %1$s</string>

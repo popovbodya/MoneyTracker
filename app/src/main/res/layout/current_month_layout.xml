@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="@color/statistics_month_card_view_color"
-    app:cardCornerRadius="16dp"
-    android:layout_margin="4dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="@dimen/month_cardview_conrer_radius"
+    android:layout_margin="@dimen/app_margin_4dp"
+    app:cardElevation="@dimen/cardview_default_elevation">
 
     <TextView
         android:id="@+id/current_month_title_text_view"

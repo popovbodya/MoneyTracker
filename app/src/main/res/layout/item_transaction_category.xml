@@ -7,9 +7,9 @@
 
     <ImageView
         android:id="@+id/category_image_view"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_margin="16dp"
+        android:layout_width="@dimen/app_image_view_size"
+        android:layout_height="@dimen/app_image_view_size"
+        android:layout_margin="@dimen/app_margin_16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -18,7 +18,7 @@
     <TextView
         android:id="@+id/category_text_view"
         style="@style/TextStyle.Small"
-        android:layout_width="128dp"
+        android:layout_width="@dimen/transaction_category_title_width"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/category_image_view"
