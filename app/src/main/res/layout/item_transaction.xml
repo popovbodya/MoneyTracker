@@ -37,6 +37,7 @@
             tools:text="5.08.2018" />
 
         <TextView
+            android:id="@+id/transaction_description_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/app_margin_16dp"
@@ -74,6 +75,7 @@
             android:layout_marginBottom="@dimen/app_margin_16dp"
             android:layout_marginEnd="@dimen/app_margin_16dp"
             android:layout_marginTop="@dimen/app_margin_8dp"
+            android:id="@+id/tv_amount"
             app:baseTextSize="18sp"
             app:decimalDigitsTextSize="13sp"
             app:decimalGravity="bottom"

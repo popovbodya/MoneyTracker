@@ -75,7 +75,6 @@ dependencies {
     // rx
     implementation libraries.rxKotlin
     implementation libraries.rxAndroid
-    implementation libraries.rxBinding
     // jetpack architecture
     implementation libraries.archExtensions
     implementation libraries.reactivestreams
@@ -94,13 +93,11 @@ dependencies {
     debugImplementation libraries.leakCanary
     releaseImplementation libraries.leakCanaryNoOp
     implementation libraries.timber
-    // temporary
-    implementation 'com.ncapdevi:frag-nav:2.4.0'
-    implementation 'org.fabiomsr:moneytextview:1.1.0'
-    implementation 'com.github.aakira:expandable-layout:1.6.0@aar'
-    implementation 'info.hoang8f:android-segmented:1.0.6'
-    implementation 'com.getbase:floatingactionbutton:1.10.1'
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    // custom views
+    implementation libraries.moneytextview
+    implementation libraries.segmentedGroup
+    implementation libraries.floatingactionbutton
+    implementation libraries.MPAndroidChart
     // test
     testImplementation libraries.junit
     testImplementation libraries.hamcrest

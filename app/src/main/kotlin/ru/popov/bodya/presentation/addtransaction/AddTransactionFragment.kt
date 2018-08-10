@@ -6,16 +6,14 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import com.jakewharton.rxbinding2.widget.RxTextView
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiFunction
 import kotlinx.android.synthetic.main.add_transaction_fragment_layout.*
 import ru.popov.bodya.R
 import ru.popov.bodya.core.mvwhatever.AppFragment
@@ -37,7 +35,6 @@ class AddTransactionFragment : AppFragment() {
     private lateinit var selectedWallet: WalletType
     private lateinit var selectedCurrency: Currency
     private lateinit var selectedCategory: TransactionsCategory
-    private lateinit var fieldsWatcherDisposable: Disposable
     private var isIncome = false
 
     companion object {
@@ -84,7 +81,6 @@ class AddTransactionFragment : AppFragment() {
     override fun onStop() {
         super.onStop()
         removeObservers()
-        fieldsWatcherDisposable.dispose()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -118,9 +114,9 @@ class AddTransactionFragment : AppFragment() {
     }
 
     private fun initUI() {
+        initCreateTransactionButton()
         initCategoriesList()
         initInputListeners()
-        initCreateTransactionButton()
         initRadioGroups()
     }
 
@@ -135,17 +131,22 @@ class AddTransactionFragment : AppFragment() {
     }
 
     private fun initInputListeners() {
-        val inputObserver: Observable<Boolean> = Observable.combineLatest(
-                RxTextView.textChanges(transaction_sum_edit_text),
-                RxTextView.textChanges(comment_edit_text),
-                BiFunction { amount, comment ->
-                    amount.isNotEmpty()
-                            && comment.isNotEmpty()
-                            && this::selectedCurrency.isInitialized
-                            && rg_currencies.checkedRadioButtonId != -1
-                            && wallets_segmented_group.checkedRadioButtonId != -1
-                })
-        fieldsWatcherDisposable = inputObserver.subscribe(btn_create_transaction::setEnabled)
+        transaction_sum_edit_text.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                checkValues()
+            }
+
+        })
+        comment_edit_text.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                checkValues()
+            }
+
+        })
 
         seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -169,7 +170,8 @@ class AddTransactionFragment : AppFragment() {
     }
 
     private fun initCreateTransactionButton() {
-        btn_create_transaction.setOnClickListener {
+        create_transaction_button.isEnabled = false
+        create_transaction_button.setOnClickListener {
             val amount = transaction_sum_edit_text.text.toString().toDouble()
             val comment = comment_edit_text.text.toString()
             transaction_sum_edit_text.clearFocus()
@@ -180,20 +182,29 @@ class AddTransactionFragment : AppFragment() {
 
     private fun initRadioGroups() {
 
-        rg_currencies.setOnCheckedChangeListener { group, checkedId ->
+        rg_currencies.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rub_radio_button -> selectedCurrency = Currency.RUB
                 R.id.usd_radio_button -> selectedCurrency = Currency.USD
                 R.id.euro_radio_button -> selectedCurrency = Currency.EUR
             }
+            checkValues()
         }
-        wallets_segmented_group.setOnCheckedChangeListener { group, checkedId ->
+        wallets_segmented_group.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.cash_radio_button -> selectedWallet = WalletType.CASH
                 R.id.bank_account_radio_button -> selectedWallet = WalletType.BANK_ACCOUNT
                 R.id.credit_radio_button -> selectedWallet = WalletType.CREDIT_CARD
             }
+            checkValues()
         }
+    }
+
+    private fun checkValues() {
+        create_transaction_button.isEnabled = (transaction_sum_edit_text.text.isNotEmpty() && comment_edit_text.text.isNotEmpty()
+                && this::selectedCurrency.isInitialized
+                && rg_currencies.checkedRadioButtonId != -1
+                && wallets_segmented_group.checkedRadioButtonId != -1)
     }
 
     private fun removeObservers() {

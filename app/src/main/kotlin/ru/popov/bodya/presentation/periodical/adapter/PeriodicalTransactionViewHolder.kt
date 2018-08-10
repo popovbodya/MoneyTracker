@@ -23,13 +23,13 @@ class PeriodicalTransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(
         transaction_period_text_view.text = item.periodDescription
 
         if (item.category is TransactionsCategory.ExpenseTransactionsCategory) {
-            tv_amount.setBaseColor(itemView.resources.getColor(R.color.colorExpense))
-            tv_amount.setDecimalsColor(itemView.resources.getColor(R.color.colorExpense))
+            amount_text_view.setBaseColor(itemView.resources.getColor(R.color.colorExpense))
+            amount_text_view.setDecimalsColor(itemView.resources.getColor(R.color.colorExpense))
         } else {
-            tv_amount.setBaseColor(itemView.resources.getColor(R.color.colorIncome))
-            tv_amount.setDecimalsColor(itemView.resources.getColor(R.color.colorIncome))
+            amount_text_view.setBaseColor(itemView.resources.getColor(R.color.colorIncome))
+            amount_text_view.setDecimalsColor(itemView.resources.getColor(R.color.colorIncome))
         }
-        tv_amount.amount = item.amount.toFloat()
-        tv_amount.setSymbol("")
+        amount_text_view.amount = item.amount.toFloat()
+        amount_text_view.setSymbol("")
     }
 }

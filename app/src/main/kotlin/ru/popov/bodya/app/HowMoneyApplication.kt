@@ -28,7 +28,7 @@ class HowMoneyApplication : Application(), HasActivityInjector {
     override fun activityInjector(): AndroidInjector<Activity> = dispatchingAndroidInjector
 
     private fun installStetho() {
-        Stetho.initializeWithDefaults(this)
+        if (BuildConfig.DEBUG) Stetho.initializeWithDefaults(this)
     }
 
     private fun installLeakCanary() {

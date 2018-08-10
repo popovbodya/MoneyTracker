@@ -189,23 +189,23 @@ class AccountFragment : AppFragment(), OnTransactionDeletedListener {
         viewModel.transactionsLiveData.observe(this, Observer { resource ->
             when (resource?.status) {
                 Status.SUCCESS -> resource.data?.let { processSuccessTransactionsResponse(it) }
-                Status.LOADING -> processLoadingState()
+                Status.LOADING -> {}
                 Status.ERROR -> processErrorState()
             }
         })
 
         viewModel.incomeLiveData.observe(this, Observer { amount ->
-            amount?.let { tv_incomes.amount = amount.toFloat() }
+            amount?.let { incomes_text_view.amount = amount.toFloat() }
         })
 
         viewModel.expenseLiveData.observe(this, Observer { amount ->
-            amount?.let { tv_expenses.amount = amount.toFloat() }
+            amount?.let { expenses_text_view.amount = amount.toFloat() }
         })
         viewModel.usdExchangeRateLiveData.observe(this, Observer { response ->
             when (response?.status) {
                 Status.ERROR -> processErrorState()
                 Status.SUCCESS -> processSuccessFirstExchangeRate(response.data)
-                Status.LOADING -> processLoadingState()
+                Status.LOADING -> {}
             }
         })
 
@@ -213,7 +213,7 @@ class AccountFragment : AppFragment(), OnTransactionDeletedListener {
             when (response?.status) {
                 Status.ERROR -> processErrorState()
                 Status.SUCCESS -> processSuccessSecondExchangeRate(response.data)
-                Status.LOADING -> processLoadingState()
+                Status.LOADING -> {}
             }
         })
     }
@@ -228,30 +228,15 @@ class AccountFragment : AppFragment(), OnTransactionDeletedListener {
     }
 
     private fun processErrorState() {
-        hideProgressBar()
         showToast(R.string.error_loading_data)
-    }
-
-    private fun hideProgressBar() {
-        progressBar.visibility = View.GONE
     }
 
     private fun processSuccessFirstExchangeRate(rate: Double?) {
         currency_top_exchange_rate.text = formatter.format(rate)
-        hideProgressBar()
     }
 
     private fun processSuccessSecondExchangeRate(rate: Double?) {
         currency_bottom_exchange_rate.text = formatter.format(rate)
-        hideProgressBar()
-    }
-
-    private fun processLoadingState() {
-        showProgressBar()
-    }
-
-    private fun showProgressBar() {
-        progressBar.visibility = View.VISIBLE
     }
 
     private fun showCurrencyAmount(currencyAmount: CurrencyAmount) {

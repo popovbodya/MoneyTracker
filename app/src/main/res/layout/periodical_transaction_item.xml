@@ -38,6 +38,7 @@
             tools:text="Дом" />
 
         <TextView
+            android:id="@+id/transaction_period_text_view"
             style="@style/TextStyle.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,6 +59,7 @@
             tools:text="5.08.2018" />
 
         <TextView
+            android:id="@+id/transaction_description_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/app_margin_16dp"
@@ -80,6 +82,7 @@
 
 
         <org.fabiomsr.moneytextview.MoneyTextView
+            android:id="@+id/amount_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/app_margin_16dp"

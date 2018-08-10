@@ -18,6 +18,7 @@
     <TextView
         style="@style/TextStyle.Small"
         android:layout_width="@dimen/transaction_category_title_width"
+        android:id="@+id/category_text_view"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/category_image_view"
